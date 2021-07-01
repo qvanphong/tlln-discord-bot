@@ -338,7 +338,7 @@ class MyClient(discord.Client):
 
     async def create_pet_pet(self, message):
         if len(message.mentions) > 0:
-            tagged_id = message.metions[0].id
+            tagged_id = message.mentions[0].id
             avatar_url = await self.get_avatar_url(tagged_id)
             pet_response = requests.get('http://localhost:3000?url=' + avatar_url)
 
