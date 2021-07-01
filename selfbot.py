@@ -5,7 +5,6 @@ from requests.exceptions import ConnectionError, Timeout, TooManyRedirects
 from pycoingecko import CoinGeckoAPI
 import discord
 import re
-import http.client
 import json
 import requests
 import io
@@ -20,7 +19,7 @@ class MyClient(discord.Client):
     pick_avatar_regex = r'^\!ava <@[!]?[0-9]*>$'
     coin_price_check_regex = r'^\?[a-zA-Z]*$'
     emoji_regex = r"!e <:.*:[0-9]*>"
-    compare_regex = r"^[0-9]* [a-zA-Z]* = (\?|bn) [a-zA-Z]*$"
+    compare_regex = r"^[0-9]*(\.[0-9]*)? [a-zA-Z]* = (\?|bn) [a-zA-Z]*$"
     ask_when_regex = r"khi nào .* [0-9]*"
 
     coin_gecko = None  # coingecko instance
@@ -33,6 +32,10 @@ class MyClient(discord.Client):
         'Accepts': 'application/json',
         'X-CMC_PRO_API_KEY': env.CMC_KEY,
     }
+
+    emoji_money = "💰"
+    emoji_check = "✅"
+    emoji_cross = "❎"
 
     binance_ws = None
     session = Session()
@@ -49,6 +52,9 @@ class MyClient(discord.Client):
     # Khởi chạy Binance websocket để cập nhật giá
     async def on_ready(self):
         print('Logged on as', self.user)
+        for emoji in client.emojis:
+            if emoji.name == "moneybag":
+                print("Name:", emoji.name + ",", "ID:", emoji.id)
         self.binance_ws = BinancePriceWs(client)
         await self.binance_ws.start()
 
@@ -156,6 +162,7 @@ class MyClient(discord.Client):
     # Lấy avatar của người yêu cầu
     async def send_user_avatar(self, message):
         avatar_url = await self.get_avatar_url(message.author.id)
+        await message.add_reaction(self.emoji_check)
         await message.channel.send(avatar_url)
 
     async def send_tagged_user_avatar(self, message):
@@ -165,11 +172,11 @@ class MyClient(discord.Client):
         else:
             tagged_id = rawId[2:-1]
         avatar_url = await self.get_avatar_url(tagged_id)
+        await message.add_reaction(self.emoji_check)
         await message.channel.send(avatar_url)
 
     # Lấy avatar URL của người dùng bằng id
     async def get_avatar_url(self, id):
-        print('fetching user\'s avatar: ' + str(id))
         data = await client.http.get_user_profile(id)
         return 'https://cdn.discordapp.com/avatars/{}/{}.png?size=1024'.format(str(id), data['user']['avatar'])
 
@@ -201,20 +208,26 @@ class MyClient(discord.Client):
     async def send_stoic_quote(self, message):
         if self.stoic_quotes is not None:
             selected_quote = self.stoic_quotes[randint(0, len(self.stoic_quotes) - 1)]
+            await message.add_reaction(self.emoji_check)
             await message.channel.send('> **"{quote}"** \n'
                                        '- *{author},{source}*'.format(quote=selected_quote["quote"],
                                                                       author=selected_quote["author"],
                                                                       source=selected_quote["source"]))
+        else:
+            await message.add_reaction(self.emoji_cross)
 
     # Gửi ngẫu nhiên 1 câu thoại của carl jung
     async def send_carl_jung_quote(self, message):
         if self.carl_jung_quotes is not None:
-            if self.carl_jung_quotes is not None:
-                selected_quote = self.carl_jung_quotes[randint(0, len(self.carl_jung_quotes) - 1)]
-                await message.channel.send('> **"{quote}"**'.format(quote=selected_quote))
+            selected_quote = self.carl_jung_quotes[randint(0, len(self.carl_jung_quotes) - 1)]
+            await message.add_reaction(self.emoji_check)
+            await message.channel.send('> **"{quote}"**'.format(quote=selected_quote))
+        else:
+            await message.add_reaction(self.emoji_cross)
 
     async def send_coin_price(self, message):
         if message.content.lower() == '?tim':
+            await message.add_reaction(self.emoji_money)
             await message.channel.send('Coin tim là điều vô giá. Hãy yêu coin tim <:thatim:827892798518460417>')
         else:
             coin_price_command_matches = re.search(self.coin_price_check_regex, message.content, re.IGNORECASE)
@@ -224,9 +237,12 @@ class MyClient(discord.Client):
                     print('fetching coin ' + coin_name + ' price')
                     coin_key = self.coin_gecko_map[coin_name]
                     coin_price_json = self.coin_gecko.get_price(ids=coin_key, vs_currencies='usd')
+                    await message.add_reaction(self.emoji_money)
                     await message.channel.send('> ' +
                                                coin_name.upper() + ' = **' + str(
                         coin_price_json[coin_key]['usd']) + '** USD ')
+                else:
+                    await message.add_reaction(self.emoji_cross)
 
     async def send_coins_compare(self, message):
         split = message.content.split(' ')
@@ -237,9 +253,11 @@ class MyClient(discord.Client):
             result = coin_gecko.get_price(ids=[coin_a, coin_b], vs_currencies='usd')
             price = result[coin_a]['usd'] / result[coin_b]['usd'] * float(split[0])
 
-            await message.channel.send(
-                '> ' + message.content.replace("?", "{:.2f}".format(price)).replace("bn", "{:.2f}".format(price)))
+            message_to_send = '> ' + message.content.replace("?", "{:.2f}".format(price)).replace("bn", "{:.2f}".format(price))
+            await message.add_reaction(self.emoji_money)
+            await message.channel.send(message_to_send.upper())
         else:
+            await message.add_reaction(self.emoji_cross)
             if coin_a is None:
                 await message.channel.send('Không tìm thấy coin' + split[1].upper())
             else:
@@ -270,16 +288,18 @@ class MyClient(discord.Client):
                             else:
                                 result += self.calulate_sleep_cycle(hour, minute, cycle, isWake) + "\n"
 
+                        await message.add_reaction(self.emoji_check)
                         if isWake:
                             await message.channel.send(
                                 ">>> Thời gian đi ngủ tối ưu nhất để thức dậy vào lúc {:02d}:{:02d}: \n{}" \
-                                .format(hour, minute, result))
+                                    .format(hour, minute, result))
                         else:
                             await message.channel.send(
                                 ">>> Thời gian thức dậy tối ưu nhất khi đi ngủ vào lúc {:02d}:{:02d}: \n{}" \
-                                .format(hour, minute, result))
+                                    .format(hour, minute, result))
                         return
 
+        await message.add_reaction(self.emoji_cross)
         await message.channel.send('> Thời gian nhập vào không hợp lệ')
 
     def calulate_sleep_cycle(self, hour, minute, cycles, wake=False):
@@ -309,24 +329,25 @@ class MyClient(discord.Client):
             print('fetching btc dominance')
             response = self.session.get(self.url)
             data = json.loads(response.text)
+            await message.add_reaction(self.emoji_check)
             await message.channel.send(
                 '> BTC Dominance: **' + "{:.2f}".format(data['data']['btc_dominance']) + '%**')
         except (ConnectionError, Timeout, TooManyRedirects) as e:
             print(e)
-            await message.channel.send('> Lấy ứ đc bạn tôi ơi')
+            await message.add_reaction(self.emoji_cross)
 
     async def create_pet_pet(self, message):
-        rawId = message.content.split('!xoa ')[1]
-        if rawId[2] == "!":
-            tagged_id = rawId[3:-1]
-        else:
-            tagged_id = rawId[2:-1]
-        avatar_url = await self.get_avatar_url(tagged_id)
-        pet_response = requests.get('http://localhost:3000?url=' + avatar_url)
+        if len(message.mentions) > 0:
+            tagged_id = message.metions[0].id
+            avatar_url = await self.get_avatar_url(tagged_id)
+            pet_response = requests.get('http://localhost:3000?url=' + avatar_url)
 
-        if pet_response.status_code == 200:
-            pet_pet = discord.File(io.BytesIO(pet_response.content), filename='pet.gif')
-            await message.channel.send(file=pet_pet)
+            if pet_response.status_code == 200:
+                pet_pet = discord.File(io.BytesIO(pet_response.content), filename='pet.gif')
+                await message.add_reaction(self.emoji_check)
+                await message.channel.send(file=pet_pet)
+        else:
+            await message.add_reaction(self.emoji_cross)
 
     async def send_response_message(self, command, message, send_all_responses=False, link=False):
         if self.responses is not None:
