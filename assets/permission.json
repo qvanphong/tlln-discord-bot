@@ -21,11 +21,23 @@
     "not_allow": []
   },
   "ark": {
-    "allow": ["price", "!ava", "other"],
-    "not_allow": ["all"]
+    "allow": [
+      "price",
+      "!ava",
+      "!pick",
+      "!e",
+      "other"
+    ],
+    "not_allow": [
+      "all"
+    ]
   },
   "bỏ-suk-cak-nofap": {
-    "allow": ["!fap"],
-    "not_allow": ["all"]
+    "allow": [
+      "!fap"
+    ],
+    "not_allow": [
+      "all"
+    ]
   }
 }
