@@ -113,10 +113,10 @@ class MyClient(discord.Client):
                     elif '!e' in message.content:
                         emoji_matcher = re.search(self.emoji_regex, message.content, re.IGNORECASE)
                         if emoji_matcher:
-                            print(emoji_matcher.group().split(':'))
-                            id = emoji_matcher.group().split(':')[2][:-1]
+                            emoji_format = ".gif" if emoji_matcher.group().split(':')[0] == '<a' else ".png"
+                            emoji_id = emoji_matcher.group().split(':')[2][:-1]
                             if id is not None:
-                                await message.channel.send('https://cdn.discordapp.com/emojis/' + id)
+                                await message.channel.send('https://cdn.discordapp.com/emojis/{}{}'.format(emoji_id, emoji_format))
                                 return
 
                     # Lấy avatar
