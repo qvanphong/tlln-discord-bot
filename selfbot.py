@@ -18,7 +18,7 @@ class MyClient(discord.Client):
     pick_regex = r'^\!pick (.*,)*(.*){1}$'
     pick_avatar_regex = r'^\!ava <@[!]?[0-9]*>$'
     coin_price_check_regex = r'^\?[a-zA-Z]*$'
-    emoji_regex = r"!e <:.*:[0-9]*>"
+    emoji_regex = r"!e <(a)?:.*:[0-9]*>"
     compare_regex = r"^[0-9]*(\.[0-9]*)? [a-zA-Z]* = (\?|bn) [a-zA-Z]*$"
     ask_when_regex = r"khi nào .* [0-9]*"
 
@@ -52,11 +52,9 @@ class MyClient(discord.Client):
     # Khởi chạy Binance websocket để cập nhật giá
     async def on_ready(self):
         print('Logged on as', self.user)
-        for emoji in client.emojis:
-            if emoji.name == "moneybag":
-                print("Name:", emoji.name + ",", "ID:", emoji.id)
-        self.binance_ws = BinancePriceWs(client)
-        await self.binance_ws.start()
+
+        # self.binance_ws = BinancePriceWs(client)
+        # await self.binance_ws.start()
 
     async def on_message(self, message):
         # Loại log lỗi do message ko rõ tới từ server/channel nào
@@ -67,15 +65,8 @@ class MyClient(discord.Client):
 
                 # ! commands
                 if len(message.content) > 0 and message.content[0] == self.prefix:
-                    # Lấy avatar
-                    if message.content.lower() == "!ava tao":
-                        await self.send_user_avatar(message)
-                        return
-                    if message.content.lower() == "!ava may" or message.content.lower() == "!ava mày":
-                        await message.channel.send(self.user.avatar_url)
-                        return
                     # stoic quote
-                    elif message.content.lower() == '!stoic':
+                    if message.content.lower() == '!stoic':
                         await self.send_stoic_quote(message)
                         return
                     elif message.content.lower() == '!carljung':
@@ -85,34 +76,41 @@ class MyClient(discord.Client):
                     elif message.content == "!dmn":
                         await self.btc_dominance(message)
                         return
-                    # an com
+                    # an com command
                     elif message.content == "!ancom":
                         await self.send_response_message("ancom", message)
                         return
-                    # simp
+
+                    # simp command
                     elif message.content == '!simp':
-                        await self.send_response_message("simp", message)
+                        await self.send_response_message("simp", message, link=True)
                         return
+                    # help command
                     elif message.content == '!help':
                         await self.send_response_message("help", message, True)
                         return
+                    # no horny command
                     elif message.content == "!horny":
                         await self.send_response_message("no_horny", message, link=True)
                         return
+                    # bonk command
                     elif message.content == "!bonk":
                         await self.send_response_message("bonk", message, link=True)
                         return
+                    # xoa command
                     elif "!xoa" in message.content:
                         await self.create_pet_pet(message)
+
+                    # pick command
                     elif '!pick' in message.content:
-                        # pick command
                         pick_command_matcher = re.search(self.pick_regex, message.content, re.IGNORECASE)
                         if pick_command_matcher:
                             answers = pick_command_matcher.group().split('!pick ')[1:][0].split(',')
                             await message.channel.send(answers[randint(0, len(answers) - 1)].lstrip())
                             return
+
+                    # get emoji
                     elif '!e' in message.content:
-                        # get emoji
                         emoji_matcher = re.search(self.emoji_regex, message.content, re.IGNORECASE)
                         if emoji_matcher:
                             print(emoji_matcher.group().split(':'))
@@ -120,12 +118,21 @@ class MyClient(discord.Client):
                             if id is not None:
                                 await message.channel.send('https://cdn.discordapp.com/emojis/' + id)
                                 return
-                    elif '!ava ' in message.content:
-                        avatar_command_matches = re.search(self.pick_avatar_regex, message.content, re.IGNORECASE)
-                        if avatar_command_matches:
-                            print('Avatar, content: ' + message.content)
+
+                    # Lấy avatar
+                    elif '!ava' in message.content:
+                        if message.content.lower() == "!ava tao":
+                            avatar_url = await self.get_avatar_url(message.author.id)
+                            await message.add_reaction(self.emoji_check)
+                            await message.channel.send(avatar_url)
+                        elif message.content.lower() == "!ava may" or message.content.lower() == "!ava mày":
+                            await message.add_reaction(self.emoji_check)
+                            await self.get_avatar_url(client.user.avatar_url)
+                        elif len(message.mentions) > 0:
                             await self.send_tagged_user_avatar(message)
-                            return
+                        return
+
+                    # Sleep/wake command
                     elif "!sleep" in message.content or "!wake" in message.content:
                         await self.send_sleep_time(message, "!wake" in message.content)
 
@@ -159,18 +166,9 @@ class MyClient(discord.Client):
                     await self.send_response_message("dam", message, link=True)
                     return
 
-    # Lấy avatar của người yêu cầu
-    async def send_user_avatar(self, message):
-        avatar_url = await self.get_avatar_url(message.author.id)
-        await message.add_reaction(self.emoji_check)
-        await message.channel.send(avatar_url)
-
+    # Lấy avatar của người được tag
     async def send_tagged_user_avatar(self, message):
-        rawId = message.content.split('!ava ')[1]
-        if rawId[2] == "!":
-            tagged_id = rawId[3:-1]
-        else:
-            tagged_id = rawId[2:-1]
+        tagged_id = message.mentions[0].id
         avatar_url = await self.get_avatar_url(tagged_id)
         await message.add_reaction(self.emoji_check)
         await message.channel.send(avatar_url)
@@ -234,7 +232,6 @@ class MyClient(discord.Client):
             if coin_price_command_matches:
                 coin_name = coin_price_command_matches.group().split('?')[1].lower()
                 if coin_name in self.coin_gecko_map:
-                    print('fetching coin ' + coin_name + ' price')
                     coin_key = self.coin_gecko_map[coin_name]
                     coin_price_json = self.coin_gecko.get_price(ids=coin_key, vs_currencies='usd')
                     await message.add_reaction(self.emoji_money)
@@ -246,8 +243,8 @@ class MyClient(discord.Client):
 
     async def send_coins_compare(self, message):
         split = message.content.split(' ')
-        coin_a = self.coin_gecko_map[split[1].lower()]
-        coin_b = self.coin_gecko_map[split[4].lower()]
+        coin_a = self.coin_gecko_map[split[1].lower()] if split[1].lower() in self.coin_gecko_map else None
+        coin_b = self.coin_gecko_map[split[4].lower()] if split[4].lower() in self.coin_gecko_map else None
 
         if coin_a is not None and coin_b is not None:
             result = coin_gecko.get_price(ids=[coin_a, coin_b], vs_currencies='usd')
@@ -259,9 +256,9 @@ class MyClient(discord.Client):
         else:
             await message.add_reaction(self.emoji_cross)
             if coin_a is None:
-                await message.channel.send('Không tìm thấy coin' + split[1].upper())
+                await message.channel.send('Không tìm thấy coin {}'.format(split[1].upper()))
             else:
-                await message.channel.send('Không tìm thấy coin' + split[4].upper())
+                await message.channel.send('Không tìm thấy coin {}'.format(split[4].upper()))
 
     async def send_sleep_time(self, message, isWake):
         #     !sleep 21:00
@@ -326,7 +323,6 @@ class MyClient(discord.Client):
 
     async def btc_dominance(self, message):
         try:
-            print('fetching btc dominance')
             response = self.session.get(self.url)
             data = json.loads(response.text)
             await message.add_reaction(self.emoji_check)
@@ -369,15 +365,15 @@ for coin in coin_gecko.get_coins_list():
     cg_map[coin['symbol']] = coin['id']
 
 # Open json and load responses
-f = open('responses.json', encoding="utf8")
+f = open('assets/responses.json', encoding="utf8")
 commands = json.load(f)
 f.close()
 
-f = open('stoic.json', encoding='utf8')
+f = open('assets/stoic.json', encoding='utf8')
 quotes = json.load(f)
 f.close()
 
-f = open('carljung.json', encoding='utf8')
+f = open('assets/carljung.json', encoding='utf8')
 carl_jung_quotes = json.load(f)
 f.close()
 

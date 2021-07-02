@@ -2,7 +2,7 @@ from tinydb import TinyDB, Query
 
 
 class PriceDB:
-    db = TinyDB('./price_db.json')
+    db = TinyDB('assets/price_db.json')
     price_query = Query()
 
     def insert_to_db(self, name, price, time):
