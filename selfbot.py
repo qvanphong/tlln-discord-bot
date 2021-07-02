@@ -10,18 +10,21 @@ import requests
 import io
 import math
 import env
+from channel_permission import ChannelPermission
 from binance_price import BinancePriceWs
 
 
 class MyClient(discord.Client):
+    # Commands Regex
     prefix = '!'
     pick_regex = r'^\!pick (.*,)*(.*){1}$'
     pick_avatar_regex = r'^\!ava <@[!]?[0-9]*>$'
-    coin_price_check_regex = r'^\?[a-zA-Z]*$'
+    coin_price_check_regex = r'^\?\S*$'
     emoji_regex = r"!e <(a)?:.*:[0-9]*>"
     compare_regex = r"^[0-9]*(\.[0-9]*)? [a-zA-Z]* = (\?|bn) [a-zA-Z]*$"
     ask_when_regex = r"khi nào .* [0-9]*"
 
+    # Instances
     coin_gecko = None  # coingecko instance
     coin_gecko_map = None  # coingecko coins list
     responses = None  # list of commands response
@@ -33,6 +36,7 @@ class MyClient(discord.Client):
         'X-CMC_PRO_API_KEY': env.CMC_KEY,
     }
 
+    # Emojis
     emoji_money = "💰"
     emoji_check = "✅"
     emoji_cross = "❎"
@@ -40,6 +44,8 @@ class MyClient(discord.Client):
     binance_ws = None
     session = Session()
     session.headers.update(headers)
+
+    channel_permission = ChannelPermission()
 
     def __init__(self, coin_gecko_map, coin_gecko, responses=None, stoic_quotes=None, carl_jung_quotes=None, **options):
         super().__init__(**options)
@@ -53,118 +59,139 @@ class MyClient(discord.Client):
     async def on_ready(self):
         print('Logged on as', self.user)
 
-        # self.binance_ws = BinancePriceWs(client)
-        # await self.binance_ws.start()
+        self.binance_ws = BinancePriceWs(client)
+        await self.binance_ws.start()
 
     async def on_message(self, message):
         # Loại log lỗi do message ko rõ tới từ server/channel nào
         # Chỉ nhận tin nhắn và phản hồi nếu server là TLLN và channel ark
         if message.author is not None and message.guild is not None and message.channel is not None and hasattr(
                 message.author, 'guild'):
-            if message.author.guild.id == env.SERVER_ID and message.channel.name == 'spam-bot':
+            if message.author.guild.id == env.SERVER_ID:
 
-                # ! commands
-                if len(message.content) > 0 and message.content[0] == self.prefix:
-                    # stoic quote
-                    if message.content.lower() == '!stoic':
-                        await self.send_stoic_quote(message)
-                        return
-                    elif message.content.lower() == '!carljung':
-                        await self.send_carl_jung_quote(message)
-                        return
-                    # BTC Dominance
-                    elif message.content == "!dmn":
-                        await self.btc_dominance(message)
-                        return
-                    # an com command
-                    elif message.content == "!ancom":
-                        await self.send_response_message("ancom", message)
-                        return
+                # Kiểm tra channel này có quyền sử dụng các lệnh của bot không
+                server_name = message.channel.name
+                if self.channel_permission.has_permission(server_name):
 
-                    # simp command
-                    elif message.content == '!simp':
-                        await self.send_response_message("simp", message, link=True)
-                        return
-                    # help command
-                    elif message.content == '!help':
-                        await self.send_response_message("help", message, True)
-                        return
-                    # no horny command
-                    elif message.content == "!horny":
-                        await self.send_response_message("no_horny", message, link=True)
-                        return
-                    # bonk command
-                    elif message.content == "!bonk":
-                        await self.send_response_message("bonk", message, link=True)
-                        return
-                    # xoa command
-                    elif "!xoa" in message.content:
-                        await self.create_pet_pet(message)
-
-                    # pick command
-                    elif '!pick' in message.content:
-                        pick_command_matcher = re.search(self.pick_regex, message.content, re.IGNORECASE)
-                        if pick_command_matcher:
-                            answers = pick_command_matcher.group().split('!pick ')[1:][0].split(',')
-                            await message.channel.send(answers[randint(0, len(answers) - 1)].lstrip())
-                            return
-
-                    # get emoji
-                    elif '!e' in message.content:
-                        emoji_matcher = re.search(self.emoji_regex, message.content, re.IGNORECASE)
-                        if emoji_matcher:
-                            emoji_format = ".gif" if emoji_matcher.group().split(':')[0] == '<a' else ".png"
-                            emoji_id = emoji_matcher.group().split(':')[2][:-1]
-                            if id is not None:
-                                await message.channel.send('https://cdn.discordapp.com/emojis/{}{}'.format(emoji_id, emoji_format))
+                    # commands
+                    if len(message.content) > 0 and message.content[0] == self.prefix:
+                        # stoic quote
+                        if message.content.lower() == '!stoic':
+                            if self.channel_permission.can_use_command(server_name, "!stoic"):
+                                await self.send_stoic_quote(message)
+                                return
+                        elif message.content.lower() == '!carljung':
+                            if self.channel_permission.can_use_command(server_name, "!carljung"):
+                                await self.send_carl_jung_quote(message)
+                                return
+                        # BTC Dominance
+                        elif message.content == "!dmn":
+                            if self.channel_permission.can_use_command(server_name, "!dmn"):
+                                await self.btc_dominance(message)
+                                return
+                        # an com command
+                        elif message.content == "!ancom":
+                            if self.channel_permission.can_use_command(server_name, "!ancom"):
+                                await self.send_response_message("ancom", message)
                                 return
 
-                    # Lấy avatar
-                    elif '!ava' in message.content:
-                        if message.content.lower() == "!ava tao":
-                            avatar_url = await self.get_avatar_url(message.author.id)
-                            await message.add_reaction(self.emoji_check)
-                            await message.channel.send(avatar_url)
-                        elif message.content.lower() == "!ava may" or message.content.lower() == "!ava mày":
-                            await message.add_reaction(self.emoji_check)
-                            await message.channel.send(client.user.avatar_url)
-                        elif len(message.mentions) > 0:
-                            await self.send_tagged_user_avatar(message)
-                        return
+                        # simp command
+                        elif message.content == '!simp':
+                            if self.channel_permission.can_use_command(server_name, "!simp"):
+                                await self.send_response_message("simp", message, link=True)
+                                return
+                        # help command
+                        elif message.content == '!help':
+                            if self.channel_permission.can_use_command(server_name, "!help"):
+                                await self.send_response_message("help", message, True)
+                                return
+                        # no horny command
+                        elif message.content == "!horny":
+                            if self.channel_permission.can_use_command(server_name, "!horny"):
+                                await self.send_response_message("no_horny", message, link=True)
+                                return
+                        # bonk command
+                        elif message.content == "!bonk":
+                            if self.channel_permission.can_use_command(server_name, "!bonk"):
+                                await self.send_response_message("bonk", message, link=True)
+                                return
+                        # xoa command
+                        elif "!xoa" in message.content:
+                            if self.channel_permission.can_use_command(server_name, "!xoa"):
+                                await self.create_pet_pet(message)
 
-                    # Sleep/wake command
-                    elif "!sleep" in message.content or "!wake" in message.content:
-                        await self.send_sleep_time(message, "!wake" in message.content)
+                        # pick command
+                        elif '!pick' in message.content:
+                            if self.channel_permission.can_use_command(server_name, "!pick"):
+                                pick_command_matcher = re.search(self.pick_regex, message.content, re.IGNORECASE)
+                                if pick_command_matcher:
+                                    answers = pick_command_matcher.group().split('!pick ')[1:][0].split(',')
+                                    await message.channel.send(answers[randint(0, len(answers) - 1)].lstrip())
+                                    return
 
-                #  Nếu có message hỏi "Khi nào xxx 30"
-                if 'khi nào' in message.content.lower():
-                    ask_matches = re.search(self.ask_when_regex, message.content, re.IGNORECASE)
-                    if ask_matches:
-                        await self.send_response_message('ask_price', message)
-                        return
+                        # get emoji
+                        elif '!e' in message.content:
+                            if self.channel_permission.can_use_command(server_name, "!e"):
+                                emoji_matcher = re.search(self.emoji_regex, message.content, re.IGNORECASE)
+                                if emoji_matcher:
+                                    emoji_format = ".gif" if emoji_matcher.group().split(':')[0] == '<a' else ".png"
+                                    emoji_id = emoji_matcher.group().split(':')[2][:-1]
+                                    if id is not None:
+                                        await message.channel.send(
+                                            'https://cdn.discordapp.com/emojis/{}{}'.format(emoji_id, emoji_format))
+                                        return
 
-                # check giá coin
-                if len(message.content) > 0 and message.content[0] == '?':
-                    await self.send_coin_price(message)
+                        # Lấy avatar
+                        elif '!ava' in message.content:
+                            if self.channel_permission.can_use_command(server_name, "!ava"):
+                                if message.content.lower() == "!ava tao":
+                                    avatar_url = await self.get_avatar_url(message.author.id)
+                                    await message.add_reaction(self.emoji_check)
+                                    await message.channel.send(avatar_url)
+                                elif message.content.lower() == "!ava may" or message.content.lower() == "!ava mày":
+                                    await message.add_reaction(self.emoji_check)
+                                    await message.channel.send(client.user.avatar_url)
+                                elif len(message.mentions) > 0:
+                                    await self.send_tagged_user_avatar(message)
+                                return
 
-                #  so sanh gia coin
-                price_compare_matcher = re.search(self.compare_regex, message.content, re.IGNORECASE)
-                if price_compare_matcher:
-                    await self.send_coins_compare(message)
-                    return
-                # Trade, Margin, Future
-                await self.bad_behaviour(message)
+                        # Sleep/wake command
+                        elif "!sleep" in message.content or "!wake" in message.content:
+                            if self.channel_permission.can_use_command(server_name, "!sleep"):
+                                await self.send_sleep_time(message, "!wake" in message.content)
+                                return
 
-                # Đập Bắn Đấm
-                if 'đập' in message.content.lower():
-                    await self.send_response_message("dap", message, link=True)
-                    return
-                elif 'bắn' in message.content.lower():
-                    await self.send_response_message("ban", message, link=True)
-                    return
-                elif 'đấm' in message.content.lower():
-                    await self.send_response_message("dam", message, link=True)
-                    return
+                    # check giá coin
+                    if self.channel_permission.can_use_command(server_name, "price"):
+                        if len(message.content) > 0 and message.content[0] == '?':
+                            await self.send_coin_price(message)
+                        price_compare_matcher = re.search(self.compare_regex, message.content, re.IGNORECASE)
+                        #  so sanh gia coin
+                        if price_compare_matcher:
+                            await self.send_coins_compare(message)
+                            return
+
+                    # Trade, Margin, Future
+                    if self.channel_permission.can_use_command(server_name, "other"):
+                        #  Nếu có message hỏi "Khi nào xxx 30"
+                        if 'khi nào' in message.content.lower():
+                            ask_matches = re.search(self.ask_when_regex, message.content, re.IGNORECASE)
+                            if ask_matches:
+                                await self.send_response_message('ask_price', message)
+                                return
+
+                        await self.bad_behaviour(message)
+
+                        # Đập Bắn Đấm
+                        if 'đập' in message.content.lower():
+                            await self.send_response_message("dap", message, link=True)
+                            return
+                        elif 'bắn' in message.content.lower():
+                            await self.send_response_message("ban", message, link=True)
+                            return
+                        elif 'đấm' in message.content.lower():
+                            await self.send_response_message("dam", message, link=True)
+                            return
 
     # Lấy avatar của người được tag
     async def send_tagged_user_avatar(self, message):
@@ -250,7 +277,8 @@ class MyClient(discord.Client):
             result = coin_gecko.get_price(ids=[coin_a, coin_b], vs_currencies='usd')
             price = result[coin_a]['usd'] / result[coin_b]['usd'] * float(split[0])
 
-            message_to_send = '> ' + message.content.replace("?", "{:.2f}".format(price)).replace("bn", "{:.2f}".format(price))
+            message_to_send = '> ' + message.content.replace("?", "{:.2f}".format(price)).replace("bn", "{:.2f}".format(
+                price))
             await message.add_reaction(self.emoji_money)
             await message.channel.send(message_to_send.upper())
         else:

@@ -1,0 +1,31 @@
+{
+  "spam-bot": {
+    "allow": [
+      "!stoic",
+      "!carljung",
+      "!dmn",
+      "!ancom",
+      "!simp",
+      "!help",
+      "!horny",
+      "!bonk",
+      "!xoa",
+      "!pick",
+      "!e",
+      "!ava",
+      "!sleep",
+      "!fap",
+      "price",
+      "other"
+    ],
+    "not_allow": []
+  },
+  "ark": {
+    "allow": ["price", "!ava", "other"],
+    "not_allow": ["all"]
+  },
+  "bỏ-suk-cak-nofap": {
+    "allow": ["!fap"],
+    "not_allow": ["all"]
+  }
+}
