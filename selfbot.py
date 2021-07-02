@@ -127,7 +127,7 @@ class MyClient(discord.Client):
                             await message.channel.send(avatar_url)
                         elif message.content.lower() == "!ava may" or message.content.lower() == "!ava mày":
                             await message.add_reaction(self.emoji_check)
-                            await self.get_avatar_url(client.user.avatar_url)
+                            await message.channel.send(client.user.avatar_url)
                         elif len(message.mentions) > 0:
                             await self.send_tagged_user_avatar(message)
                         return
