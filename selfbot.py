@@ -1,7 +1,6 @@
 from random import randint
 
 import discord
-import re
 import env
 from channel_permission import ChannelPermission
 from binance_price import BinancePriceWs
@@ -85,10 +84,11 @@ class MyClient(discord.Client):
                                     and self.command_sender.is_regex_match(message.content,
                                                                            self.command_sender.pick_regex):
                                 answers = message.content.split('!pick ')[1:][0].split(',')
-                                await message.channel.send(answers[randint(0, len(answers) - 1)].lstrip())
+                                await message.channel.send(
+                                    '> {}'.format(answers[randint(0, len(answers) - 1)].lstrip()))
                                 return
                         elif '!fap' in message.content:
-                            if self.channel_permission.can_use_command(channel_name,  "!fap"):
+                            if self.channel_permission.can_use_command(channel_name, "!fap"):
                                 await self.command_sender.send_fap_content(message)
 
                         # get emoji
@@ -97,7 +97,7 @@ class MyClient(discord.Client):
                                     and self.command_sender.is_regex_match(message.content,
                                                                            self.command_sender.emoji_regex):
                                 emoji_format = ".gif" if message.content.split(':')[0] == '<a' else ".png"
-                                emoji_id = message.content.group().split(':')[2][:-1]
+                                emoji_id = message.content.split(':')[2][:-1]
                                 if id is not None:
                                     await message.channel.send(
                                         'https://cdn.discordapp.com/emojis/{}{}'.format(emoji_id, emoji_format))
