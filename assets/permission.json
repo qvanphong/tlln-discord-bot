@@ -4,6 +4,7 @@
       "!stoic",
       "!carljung",
       "!dmn",
+      "!dh",
       "!ancom",
       "!simp",
       "!help",
@@ -39,5 +40,9 @@
     "not_allow": [
       "all"
     ]
+  },
+  "all":  {
+    "allow": ["!dh"],
+    "not_allow": ["all"]
   }
 }

@@ -12,15 +12,16 @@ class ChannelPermission():
     def can_use_command(self, channel, command):
         if channel in self.channels_permission:
             channel_permissions = self.channels_permission[channel]
-            allows = channel_permissions["allow"]
-            not_allows = channel_permissions["not_allow"]
+        else:
+            channel_permissions = self.channels_permission["all"]
 
-            if command in allows:
-                return True
-            if "all" in allows and command not in not_allows:
-                return True
-            else:
-                return False
+        allows = channel_permissions["allow"]
+        not_allows = channel_permissions["not_allow"]
+
+        if command in allows\
+                or ("all" in allows and command not in not_allows)\
+                or (command not in allows and command not in not_allows and command in self.channels_permission["all"]["allow"]):
+            return True
         else:
             return False
 
