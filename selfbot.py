@@ -83,6 +83,22 @@ class MyClient(discord.Client):
                             await self.command_sender.send_response_message("dh", message)
                             return
 
+                    elif message.content == "!chaybobinhoi":
+                        if self.channel_permission.can_use_command(channel_name, "chaybo"):
+                            await self.command_sender.send_response_message("chaybo", message)
+                            return
+
+                    elif "!chaybo " in message.content:
+                        if self.channel_permission.can_use_command(channel_name, "chaybo"):
+                            if len(message.mentions) > 0:
+                                message_str = "{} vừa rủ **{}** đi chạy bộ.\nhttps://cdn.discordapp.com/attachments/829403779513974824/861139558250709002/chaybobinhoi.gif"
+                                tagged_users = []
+                                for index in range(0, len(message.mentions)):
+                                    tagged_users.append(message.mentions[index].display_name)
+
+                                await message.channel.send(
+                                    ">>> " + message_str.format(message.author.name, ', '.join(tagged_users)))
+
                     # xoa command
                     elif "!xoa" in message.content:
                         if self.channel_permission.can_use_command(channel_name, "!xoa"):
