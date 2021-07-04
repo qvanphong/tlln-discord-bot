@@ -42,7 +42,7 @@
     ]
   },
   "all":  {
-    "allow": ["!dh"],
+    "allow": ["!dh", "!help"],
     "not_allow": ["all"]
   }
 }
