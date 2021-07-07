@@ -245,15 +245,9 @@ class CommandSender:
             await message.add_reaction(self.emoji_cross)
 
     async def send_response_message(self, command, message, send_all_responses=False, link=False):
-        if self.responses is not None:
-            responses = self.responses[command]
-            if responses is not None and len(responses) > 0:
-                if send_all_responses:
-                    response = ''.join(responses)
-                    await message.channel.send(('>>> ' if link is False else '') + response)
-                else:
-                    await message.channel.send(
-                        ('>>> ' if link is False else '') + responses[randint(0, len(responses) - 1)])
+        response_message = self.get_response_message(command, send_all_responses)
+        if response_message is not None:
+            await message.channel.send(('>>> ' if link is False else '') + response_message)
 
     async def send_fap_content(self, message):
         conn = http.client.HTTPSConnection("emergency.nofap.com")
@@ -265,3 +259,11 @@ class CommandSender:
 
     def is_regex_match(self, message_content, pattern):
         return re.search(pattern, message_content, re.IGNORECASE) is not None
+
+    def get_response_message(self, command, get_all=False):
+        if self.responses is not None:
+            responses = self.responses[command]
+            if responses is not None and len(responses) > 0:
+                if get_all:
+                    return ''.join(responses)
+                return responses[randint(0, len(responses) - 1)]
