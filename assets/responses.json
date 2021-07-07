@@ -56,8 +56,7 @@
   ],
   "margin": [
     "ra đê nha bây <:vamohoi:828369143052763196>",
-    "Margin để đánh cho nhanh\nMười thằng chơi hết 11 thằng ra đê",
-    "'G' trong margin là giàu sang."
+    "Margin để đánh cho nhanh\nMười thằng chơi hết 11 thằng ra đê"
   ],
   "swap": [
     "swap mất coin ráng chịu <:vcl:837406003011649576>",
@@ -86,7 +85,28 @@
   ],
   "no_horny":["https://media.discordapp.net/attachments/829403779513974824/859371277612744714/2Q.png"],
   "bonk": ["https://media.discordapp.net/attachments/829403779513974824/859371333560172555/image0.png?width=545&height=434"],
-  "chaybo": [
+  "chaybobinhoi": [
     "Chạy bộ Bình ơi!!"
+  ],
+  "chaybo": [
+    "**{author}** vừa rủ **{tagged}** đi chạy bộ.",
+    "**{author}** chán quá nên rủ **{tagged}** đi chạy bộ.",
+    "**{author}** hỏny nên rủ **{tagged}** đi chạy bộ cho bớt hỏny.",
+    "**{author}** ôm gear lâu quá nên rủ **{tagged}** đi chạy bộ cho khỏe người.",
+    "**{author}** vừa rủ **{tagged}** đi chạy bộ đến Kim Mã.",
+    "**{author}** vừa sẽ xong thì bỗng rủ **{tagged}** đi chạy bộ.",
+    "**{author}** vừa mua ark xong nên rủ **{tagged}** đi chạy bộ.",
+    "**{author}** rủ **{tagged}** đi chạy bộ nhanh nhanh để về còn sẽ.",
+    "**{author}** vừa rủ **{tagged}** đi chạy bộ để chú dream không thể chửi \"ngồi lì\".",
+    "**{author}** đang rất mệt nhưng vẫn rủ **{tagged}** đi chạy bộ, tinh thần chạy bộ++ 👏 ",
+    "**{author}** éo có lý do gì để rủ **{tagged}** đi chạy bộ, nhưng vẫn rủ **{tagged}** đi chạy bộ"
+  ],
+  "chaytrongphong": [
+    "**{author}** vừa rủ **{tagged}** chạy bộ, nhưng tình hình covid căng thẳng nên cả 2 cùng chạy trong phòng",
+    "**{author}** vừa rủ **{tagged}** chạy bộ trong phòng",
+    "**{author}** vừa mua máy chạy bộ, bèn rủ **{tagged}** sang nhà chạy bộ cùng.",
+    "**{tagged}** vừa đến nhà **{author}** chơi nhưng **{author}** rủ ngay **{tagged}** chạy bộ trong phòng éo có lý do ",
+    "**{tagged}** vừa sẽ xong, con người hắn trong lòng giờ trống rỗng.\nHắn không còn cảm giác cao trào trong khoảng vài phút trước.\nHắn buồn chán, tuyệt vọng... Nhưng,\nĐiện thoại hắn bỗng sáng lên dòng tin nhắn\nHắn đọc và mỉm cười, ra khỏi giường, nhanh nhanh lẹ lẹ mặc bộ quần áo ở dưới sàn nhà\nCon người hắn vui tươi trở lại bởi dòng tin nhắn đó..\nDòng tin nhắn khiến hắn tự tin trở lại với thực tại này..\n\"**{author}**: 'Alo, qua nhà tao chạy bộ ko?'\""
+
   ]
 }

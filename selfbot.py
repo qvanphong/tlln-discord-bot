@@ -85,23 +85,29 @@ class MyClient(discord.Client):
 
                     elif message.content == "!chaybobinhoi":
                         if self.channel_permission.can_use_command(channel_name, "chaybo"):
-                            await self.command_sender.send_response_message("chaybo", message)
+                            await self.command_sender.send_response_message("chaybobinhoi", message)
                             await message.channel.send(
                                 "https://cdn.discordapp.com/attachments/829403779513974824/861139558250709002/chaybobinhoi.gif")
                             return
 
-                    elif "!chaybo " in message.content:
+                    elif "!chaybo " in message.content or "!chaytrongphong" in message.content:
                         if self.channel_permission.can_use_command(channel_name, "chaybo"):
+                            run_command = "chaybo" if "!chaytrongphong" not in message.content else "chaytrongphong"
+                            run_image_url = \
+                                "https://cdn.discordapp.com/attachments/829403779513974824/861139558250709002/chaybobinhoi.gif" \
+                                    if "!chaytrongphong" not in message.content else \
+                                    "https://cdn.discordapp.com/attachments/829403779513974824/862269728998424606/chay-trong-phong.gif"
+
                             if len(message.mentions) > 0:
-                                message_str = "**{}** vừa rủ **{}** đi chạy bộ."
+                                message_str = self.command_sender.get_response_message(run_command)
                                 tagged_users = []
                                 for index in range(0, len(message.mentions)):
                                     tagged_users.append(message.mentions[index].display_name)
 
                                 await message.channel.send(
-                                    ">>> " + message_str.format(message.author.display_name, ', '.join(tagged_users)))
-                                await message.channel.send(
-                                    "https://cdn.discordapp.com/attachments/829403779513974824/861139558250709002/chaybobinhoi.gif")
+                                    ">>> " + message_str.format(author=message.author.display_name,
+                                                                tagged=', '.join(tagged_users)))
+                                await message.channel.send(run_image_url)
 
                     # xoa command
                     elif "!xoa" in message.content:
