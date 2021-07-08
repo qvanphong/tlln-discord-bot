@@ -231,14 +231,14 @@ class CommandSender:
             print(e)
             await message.add_reaction(self.emoji_cross)
 
-    async def create_pet_pet(self, message):
+    async def create_gif_emoji(self, message, type):
         if len(message.mentions) > 0:
             tagged_id = message.mentions[0].id
             avatar_url = await self.get_avatar_url(tagged_id)
-            pet_response = requests.get('http://localhost:3000?url=' + avatar_url)
+            gif_emoji_response = requests.get('http://localhost:3000?url={}&type={}'.format(avatar_url, type))
 
-            if pet_response.status_code == 200:
-                pet_pet = discord.File(io.BytesIO(pet_response.content), filename='pet.gif')
+            if gif_emoji_response.status_code == 200:
+                pet_pet = discord.File(io.BytesIO(gif_emoji_response.content), filename='generated.gif')
                 await message.add_reaction(self.emoji_check)
                 await message.channel.send(file=pet_pet)
         else:

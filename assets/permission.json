@@ -27,6 +27,7 @@
       "!ava",
       "!pick",
       "!e",
+      "!bonk",
       "chaybo",
       "other"
     ],
@@ -43,7 +44,7 @@
     ]
   },
   "all":  {
-    "allow": ["!dh", "!help"],
+    "allow": ["!dh", "!help", "!tailieu"],
     "not_allow": ["all"]
   }
 }

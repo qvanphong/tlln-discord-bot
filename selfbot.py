@@ -83,6 +83,11 @@ class MyClient(discord.Client):
                             await self.command_sender.send_response_message("dh", message)
                             return
 
+                    elif message.content == "!tailieu":
+                        if self.channel_permission.can_use_command(channel_name, "!tailieu"):
+                            await self.command_sender.send_response_message("tailieu", message)
+                            return
+
                     elif message.content == "!chaybobinhoi":
                         if self.channel_permission.can_use_command(channel_name, "chaybo"):
                             await self.command_sender.send_response_message("chaybobinhoi", message)
@@ -112,7 +117,11 @@ class MyClient(discord.Client):
                     # xoa command
                     elif "!xoa" in message.content:
                         if self.channel_permission.can_use_command(channel_name, "!xoa"):
-                            await self.command_sender.create_pet_pet(message)
+                            await self.command_sender.create_gif_emoji(message, "pet")
+
+                    elif "!bonk" in message.content:
+                        if self.channel_permission.can_use_command(channel_name, "!bonk"):
+                            await self.command_sender.create_gif_emoji(message, "bonk")
 
                     # pick command
                     elif '!pick' in message.content:

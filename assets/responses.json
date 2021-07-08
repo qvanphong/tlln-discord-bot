@@ -17,6 +17,7 @@
     "`!ava tao`: Lấy avatar của mày\n",
     "`!ava may`: Lấy avatar của tao\n",
     "`!stoic`: Lấy quote stoic ra đọc để tịnh tâm <:pray2:840209827325935616>\n",
+    "`!tailieu`: Tổng hợp tài liệu từ Trở lại làm người\n",
     "`!carljung`: Lấy ngẫu nhiên quote của Carl Jung\n",
     "`!dh`: Tài liệu của Duy Huỳnh\n",
     "`!fap`: Lấy ngẫu nhiên nội dung về NoFap\n",
@@ -105,8 +106,9 @@
     "**{author}** vừa rủ **{tagged}** chạy bộ, nhưng tình hình covid căng thẳng nên cả 2 cùng chạy trong phòng",
     "**{author}** vừa rủ **{tagged}** chạy bộ trong phòng",
     "**{author}** vừa mua máy chạy bộ, bèn rủ **{tagged}** sang nhà chạy bộ cùng.",
-    "**{tagged}** vừa đến nhà **{author}** chơi nhưng **{author}** rủ ngay **{tagged}** chạy bộ trong phòng éo có lý do ",
-    "**{tagged}** vừa sẽ xong, con người hắn trong lòng giờ trống rỗng.\nHắn không còn cảm giác cao trào trong khoảng vài phút trước.\nHắn buồn chán, tuyệt vọng... Nhưng,\nĐiện thoại hắn bỗng sáng lên dòng tin nhắn\nHắn đọc và mỉm cười, ra khỏi giường, nhanh nhanh lẹ lẹ mặc bộ quần áo ở dưới sàn nhà\nCon người hắn vui tươi trở lại bởi dòng tin nhắn đó..\nDòng tin nhắn khiến hắn tự tin trở lại với thực tại này..\n\"**{author}**: 'Alo, qua nhà tao chạy bộ ko?'\""
-
+    "**{tagged}** vừa đến nhà **{author}** chơi nhưng **{author}** rủ ngay **{tagged}** chạy bộ trong phòng éo có lý do "
+  ],
+  "tailieu": [
+    "Tài liệu về Stoic, Carl Jung, Duy Huỳnh, Nguyễn Duy Cần,... được sưu tầm bở Trở lại làm người: \nhttps://bit.ly/mucluclink"
   ]
 }
