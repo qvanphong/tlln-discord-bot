@@ -7,7 +7,7 @@ from binance_price import BinancePriceWs
 from command_sender import CommandSender
 
 
-class MyClient(discord.Client):
+class DiscordCommandClient(discord.Client):
     binance_ws = None
     command_sender = None
     channel_permission = ChannelPermission()
@@ -201,5 +201,5 @@ class MyClient(discord.Client):
                         return
 
 
-client = MyClient()
+client = DiscordCommandClient()
 client.run(env.TOKEN)
