@@ -19,7 +19,8 @@ class CommandSender:
     pick_regex = r'^\!pick (.*,)*(.*){1}$'
     pick_avatar_regex = r'^\!ava <@[!]?[0-9]*>$'
     coin_price_check_regex = r'^\?\S*$'
-    emoji_regex = r"!e <(a)?:.*:[0-9]*>"
+    emoji_command_regex = r"!e <(a)?:.*:[0-9]*>"
+    emoji_regex = r"<(a)?:.*:[0-9]*>"
     compare_regex = r"^[0-9]*(\.[0-9]*)? [a-zA-Z]* = (\?|bn) [a-zA-Z]*$"
     ask_when_regex = r"khi nào .* [0-9]*"
 

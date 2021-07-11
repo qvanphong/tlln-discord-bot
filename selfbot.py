@@ -141,7 +141,7 @@ class DiscordCommandClient(discord.Client):
                     elif '!e' in message.content:
                         if self.channel_permission.can_use_command(channel_name, "!e") \
                                 and self.command_sender.is_regex_match(message.content,
-                                                                       self.command_sender.emoji_regex):
+                                                                       self.command_sender.emoji_command_regex):
                             emoji_format = ".gif" if message.content.split(':')[0] == '<a' else ".png"
                             emoji_id = message.content.split(':')[2][:-1]
                             if id is not None:
