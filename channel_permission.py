@@ -5,7 +5,7 @@ class ChannelPermission():
     channels_permission = None
 
     def __init__(self):
-        f = open("assets/permission.json", "r")
+        f = open("assets/permission.json", "r", encoding="utf8")
         self.channels_permission = json.load(f)
         f.close()
 
