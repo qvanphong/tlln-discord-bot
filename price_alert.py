@@ -1,4 +1,4 @@
-from price_db import PriceDB
+import price_repository as price_db
 import tornado.websocket
 import json
 import env
@@ -10,9 +10,8 @@ except ImportError:
     import _thread as thread
 
 
-class BinancePriceWs:
+class PriceAlert:
     discord_client = None
-    price_db = PriceDB()
 
     gas_price = None
     neo_price = None
@@ -69,8 +68,8 @@ class BinancePriceWs:
             self.temp_btc['time'] = time
 
         if old_price_data is None:
-            self.price_db.insert_to_db(coin_name, current_price, time)
-            old_price_data = self.price_db.get_coin_by_name(coin_name)
+            price_db.insert_to_db(coin_name, current_price, time)
+            old_price_data = price_db.get_coin_by_name(coin_name)
 
         if currency == 'BTC':
             if self.btc_price is not None:
@@ -104,19 +103,19 @@ class BinancePriceWs:
                 .get_channel(discord_utils.get_spam_bot_channel_id()) \
                 .send(message)
 
-            self.price_db.insert_to_db(coin_name, current_price, time)
+            price_db.insert_to_db(coin_name, current_price, time)
             return {'coin_name': coin_name, 'last_price': current_price, 'time': time}
 
         return old_price_data
 
     def load_old_price(self):
-        self.gas_price = self.price_db.get_coin_by_name("gas")
-        self.neo_price = self.price_db.get_coin_by_name("neo")
-        self.ark_price = self.price_db.get_coin_by_name("ark")
-        self.firo_price = self.price_db.get_coin_by_name("firo")
-        self.btc_price = self.price_db.get_coin_by_name("btc")
-        self.zen_price = self.price_db.get_coin_by_name("zen")
-        self.dash_price = self.price_db.get_coin_by_name("dash")
+        self.gas_price = price_db.get_coin_by_name("gas")
+        self.neo_price = price_db.get_coin_by_name("neo")
+        self.ark_price = price_db.get_coin_by_name("ark")
+        self.firo_price = price_db.get_coin_by_name("firo")
+        self.btc_price = price_db.get_coin_by_name("btc")
+        self.zen_price = price_db.get_coin_by_name("zen")
+        self.dash_price = price_db.get_coin_by_name("dash")
 
     # Start binance websocket, đồng thời load lại các dữ liệu giá cữ trước khi chạy
     async def start(self):

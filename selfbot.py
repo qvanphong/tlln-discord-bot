@@ -3,21 +3,24 @@ from random import randint
 import discord
 import env
 from channel_permission import ChannelPermission
-from binance_price import BinancePriceWs
-from command_sender import CommandSender
+from price_alert import PriceAlert
+from responder import Responder
 
 
 class DiscordCommandClient(discord.Client):
     binance_ws = None
-    command_sender = None
-    channel_permission = ChannelPermission()
+    responder = None
+    permission = ChannelPermission()
 
     # Khởi chạy Binance websocket để cập nhật giá
     async def on_ready(self):
         print('Logged on as', self.user)
 
-        self.command_sender = CommandSender(client)
-        self.binance_ws = BinancePriceWs(client)
+        self.responder = Responder(client)
+
+        # Comment if you don't want to use Binance price alert
+        print('Starting price alert...')
+        self.binance_ws = PriceAlert(client)
         await self.binance_ws.start()
 
     async def on_message(self, message):
@@ -28,75 +31,75 @@ class DiscordCommandClient(discord.Client):
             if message.author.guild.id == env.SERVER_ID:
 
                 # Kiểm tra channel này có quyền sử dụng các lệnh của bot không
-                channel_name = message.channel.name
+                channel_id = message.channel.id
 
                 # commands
-                if len(message.content) > 0 and message.content[0] == self.command_sender.prefix:
+                if len(message.content) > 0 and message.content[0] == self.responder.prefix:
                     # stoic quote
                     if message.content.lower() == '!stoic':
-                        if self.channel_permission.can_use_command(channel_name, "!stoic"):
-                            await self.command_sender.send_stoic_quote(message)
+                        if self.permission.can_use_command(channel_id, "!stoic"):
+                            await self.responder.send_stoic_quote(message)
                             return
 
                     elif message.content.lower() == '!carljung':
-                        if self.channel_permission.can_use_command(channel_name, "!carljung"):
-                            await self.command_sender.send_carl_jung_quote(message)
+                        if self.permission.can_use_command(channel_id, "!carljung"):
+                            await self.responder.send_carl_jung_quote(message)
                             return
 
                     # BTC Dominance
                     elif message.content == "!dmn":
-                        if self.channel_permission.can_use_command(channel_name, "!dmn"):
-                            await self.command_sender.btc_dominance(message)
+                        if self.permission.can_use_command(channel_id, "!dmn"):
+                            await self.responder.send_btc_dominance(message)
                             return
                     # an com command
                     elif message.content == "!ancom":
-                        if self.channel_permission.can_use_command(channel_name, "!ancom"):
-                            await self.command_sender.send_response_message("ancom", message)
+                        if self.permission.can_use_command(channel_id, "!ancom"):
+                            await self.responder.send_response_message("ancom", message)
                             return
 
                     # simp command
                     elif message.content == '!simp':
-                        if self.channel_permission.can_use_command(channel_name, "!simp"):
-                            await self.command_sender.send_response_message("simp", message, link=True)
+                        if self.permission.can_use_command(channel_id, "!simp"):
+                            await self.responder.send_response_message("simp", message, link=True)
                             return
 
                     # help command
                     elif message.content == '!help':
-                        if self.channel_permission.can_use_command(channel_name, "!help"):
-                            await self.command_sender.send_response_message("help", message, True)
+                        if self.permission.can_use_command(channel_id, "!help"):
+                            await self.responder.send_response_message("help", message, True)
                             return
 
                     # no horny command
                     elif message.content == "!horny":
-                        if self.channel_permission.can_use_command(channel_name, "!horny"):
-                            await self.command_sender.send_response_message("no_horny", message, link=True)
+                        if self.permission.can_use_command(channel_id, "!horny"):
+                            await self.responder.send_response_message("no_horny", message, link=True)
                             return
 
                     # bonk command
                     elif message.content == "!bonk":
-                        if self.channel_permission.can_use_command(channel_name, "!bonk"):
-                            await self.command_sender.send_response_message("bonk", message, link=True)
+                        if self.permission.can_use_command(channel_id, "!bonk"):
+                            await self.responder.send_response_message("bonk", message, link=True)
                             return
 
                     elif message.content == "!dh":
-                        if self.channel_permission.can_use_command(channel_name, "!dh"):
-                            await self.command_sender.send_response_message("dh", message)
+                        if self.permission.can_use_command(channel_id, "!dh"):
+                            await self.responder.send_response_message("dh", message)
                             return
 
                     elif message.content == "!tailieu":
-                        if self.channel_permission.can_use_command(channel_name, "!tailieu"):
-                            await self.command_sender.send_response_message("tailieu", message)
+                        if self.permission.can_use_command(channel_id, "!tailieu"):
+                            await self.responder.send_response_message("tailieu", message)
                             return
 
                     elif message.content == "!chaybobinhoi":
-                        if self.channel_permission.can_use_command(channel_name, "chaybo"):
-                            await self.command_sender.send_response_message("chaybobinhoi", message)
+                        if self.permission.can_use_command(channel_id, "chaybo"):
+                            await self.responder.send_response_message("chaybobinhoi", message)
                             await message.channel.send(
                                 "https://cdn.discordapp.com/attachments/829403779513974824/861139558250709002/chaybobinhoi.gif")
                             return
 
                     elif "!chaybo " in message.content or "!chaytrongphong" in message.content:
-                        if self.channel_permission.can_use_command(channel_name, "chaybo"):
+                        if self.permission.can_use_command(channel_id, "chaybo"):
                             run_command = "chaybo" if "!chaytrongphong" not in message.content else "chaytrongphong"
                             run_image_url = \
                                 "https://cdn.discordapp.com/attachments/829403779513974824/861139558250709002/chaybobinhoi.gif" \
@@ -104,7 +107,7 @@ class DiscordCommandClient(discord.Client):
                                     "https://cdn.discordapp.com/attachments/829403779513974824/862269728998424606/chay-trong-phong.gif"
 
                             if len(message.mentions) > 0:
-                                message_str = self.command_sender.get_response_message(run_command)
+                                message_str = self.responder.get_response_message(run_command)
                                 tagged_users = []
                                 for index in range(0, len(message.mentions)):
                                     tagged_users.append(message.mentions[index].display_name)
@@ -116,32 +119,32 @@ class DiscordCommandClient(discord.Client):
 
                     # xoa command
                     elif "!xoa" in message.content:
-                        if self.channel_permission.can_use_command(channel_name, "!xoa"):
-                            await self.command_sender.create_gif_emoji(message, "pet")
+                        if self.permission.can_use_command(channel_id, "!xoa"):
+                            await self.responder.create_gif_emoji(message, "pet")
 
                     elif "!bonk" in message.content:
-                        if self.channel_permission.can_use_command(channel_name, "!bonk"):
-                            await self.command_sender.create_gif_emoji(message, "bonk")
+                        if self.permission.can_use_command(channel_id, "!bonk"):
+                            await self.responder.create_gif_emoji(message, "bonk")
 
                     # pick command
                     elif '!pick' in message.content:
-                        if self.channel_permission.can_use_command(channel_name, "!pick") \
-                                and self.command_sender.is_regex_match(message.content,
-                                                                       self.command_sender.pick_regex):
+                        if self.permission.can_use_command(channel_id, "!pick") \
+                                and self.responder.is_regex_match(message.content,
+                                                                  self.responder.pick_regex):
                             answers = message.content.split('!pick ')[1:][0].split(',')
                             await message.channel.send(
                                 '> {}'.format(answers[randint(0, len(answers) - 1)].lstrip()))
                             return
 
                     elif '!fap' in message.content:
-                        if self.channel_permission.can_use_command(channel_name, "!fap"):
-                            await self.command_sender.send_fap_content(message)
+                        if self.permission.can_use_command(channel_id, "!fap"):
+                            await self.responder.send_fap_content(message)
 
                     # get emoji
                     elif '!e' in message.content:
-                        if self.channel_permission.can_use_command(channel_name, "!e") \
-                                and self.command_sender.is_regex_match(message.content,
-                                                                       self.command_sender.emoji_command_regex):
+                        if self.permission.can_use_command(channel_id, "!e") \
+                                and self.responder.is_regex_match(message.content,
+                                                                  self.responder.emoji_command_regex):
                             emoji_format = ".gif" if message.content.split(':')[0] == '<a' else ".png"
                             emoji_id = message.content.split(':')[2][:-1]
                             if id is not None:
@@ -151,53 +154,53 @@ class DiscordCommandClient(discord.Client):
 
                     # Lấy avatar
                     elif '!ava' in message.content:
-                        if self.channel_permission.can_use_command(channel_name, "!ava"):
+                        if self.permission.can_use_command(channel_id, "!ava"):
                             if message.content.lower() == "!ava tao":
-                                avatar_url = await self.command_sender.get_avatar_url(message.author.id)
-                                await message.add_reaction(self.command_sender.emoji_check)
+                                avatar_url = await self.responder.get_avatar_url(message.author.id)
+                                await message.add_reaction(self.responder.emoji_check)
                                 await message.channel.send(avatar_url)
                             elif message.content.lower() == "!ava may" or message.content.lower() == "!ava mày":
-                                await message.add_reaction(self.command_sender.emoji_check)
+                                await message.add_reaction(self.responder.emoji_check)
                                 await message.channel.send(client.user.avatar_url)
                             elif len(message.mentions) > 0:
-                                await self.command_sender.send_tagged_user_avatar(message)
+                                await self.responder.send_tagged_user_avatar(message)
                             return
 
                     # Sleep/wake command
                     elif "!sleep" in message.content or "!wake" in message.content:
-                        if self.channel_permission.can_use_command(channel_name, "!sleep"):
-                            await self.command_sender.send_sleep_time(message, "!wake" in message.content)
+                        if self.permission.can_use_command(channel_id, "!sleep"):
+                            await self.responder.send_sleep_time(message, "!wake" in message.content)
                             return
 
                 # check giá coin
-                if self.channel_permission.can_use_command(channel_name, "price"):
+                if self.permission.can_use_command(channel_id, "price"):
                     # lấy giá coin theo yêu cầu
                     if len(message.content) > 0 and message.content[0] == '?':
-                        await self.command_sender.send_coin_price(message)
+                        await self.responder.send_coin_price(message)
                     #  so sánh giá trị giữa 2 coin
-                    if self.command_sender.is_regex_match(message.content, self.command_sender.compare_regex):
-                        await self.command_sender.send_coins_compare(message)
+                    if self.responder.is_regex_match(message.content, self.responder.compare_regex):
+                        await self.responder.send_coins_compare(message)
                         return
 
                 # Trade, Margin, Future
-                if self.channel_permission.can_use_command(channel_name, "other"):
+                if self.permission.can_use_command(channel_id, "other"):
                     #  Nếu có message hỏi "Khi nào xxx 30"
                     if 'khi nào' in message.content.lower():
-                        if self.command_sender.is_regex_match(message.content, self.command_sender.ask_when_regex):
-                            await self.command_sender.send_response_message('ask_price', message)
+                        if self.responder.is_regex_match(message.content, self.responder.ask_when_regex):
+                            await self.responder.send_response_message('ask_price', message)
                             return
 
-                    await self.command_sender.bad_behaviour(message)
+                    await self.responder.bad_behaviour(message)
 
                     # Đập Bắn Đấm
                     if 'đập' in message.content.lower():
-                        await self.command_sender.send_response_message("dap", message, link=True)
+                        await self.responder.send_response_message("dap", message, link=True)
                         return
                     elif 'bắn' in message.content.lower():
-                        await self.command_sender.send_response_message("ban", message, link=True)
+                        await self.responder.send_response_message("ban", message, link=True)
                         return
                     elif 'đấm' in message.content.lower():
-                        await self.command_sender.send_response_message("dam", message, link=True)
+                        await self.responder.send_response_message("dam", message, link=True)
                         return
 
 

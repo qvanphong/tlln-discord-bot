@@ -15,8 +15,10 @@ def insert_to_db(author, emojis):
 def get_author_emoji(author):
     return db.get(reaction_query.author == author)
 
+
 def delete_author(author):
     return db.update(delete('author'), reaction_query.author == author)
+
 
 def init_fetch():
     return db.all()

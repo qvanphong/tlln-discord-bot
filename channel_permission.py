@@ -1,29 +1,31 @@
 import json
 
 
-class ChannelPermission():
-    channels_permission = None
+class ChannelPermission:
+    channels = None
 
     def __init__(self):
         f = open("assets/permission.json", "r", encoding="utf8")
-        self.channels_permission = json.load(f)
+        self.channels = json.load(f)
         f.close()
 
-    def can_use_command(self, channel, command):
-        if channel in self.channels_permission:
-            channel_permissions = self.channels_permission[channel]
+    def can_use_command(self, channel_id, command):
+        channel_id_str = str(channel_id)
+
+        if channel_id_str in self.channels:
+            permissions = self.channels[channel_id_str]
         else:
-            channel_permissions = self.channels_permission["all"]
+            permissions = self.channels["all"]
 
-        allows = channel_permissions["allow"]
-        not_allows = channel_permissions["not_allow"]
+        allows = permissions["allow"]
+        not_allows = permissions["not_allow"]
 
-        if command in allows\
-                or ("all" in allows and command not in not_allows)\
-                or (command not in allows and command not in not_allows and command in self.channels_permission["all"]["allow"]):
+        # Only allow command excecute if that command in "allow" array (include 'all' commands)
+        # and not in "not_allow" array
+        # If that command not exist in passed server id, check the "all" permission
+        if command in allows \
+                or ("all" in allows and command not in not_allows) \
+                or (command not in allows and command not in not_allows and command in self.channels["all"]["allow"]):
             return True
         else:
             return False
-
-    def has_permission(self, channel):
-        return channel in self.channels_permission

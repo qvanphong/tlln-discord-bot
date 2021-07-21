@@ -13,7 +13,7 @@ import env
 import http.client
 
 
-class CommandSender:
+class Responder:
     # Commands Regex
     prefix = '!'
     pick_regex = r'^\!pick (.*,)*(.*){1}$'
@@ -221,7 +221,7 @@ class CommandSender:
         minute = result % 60
         return "** {:02d}:{:02d} **".format(hour, minute)
 
-    async def btc_dominance(self, message):
+    async def send_btc_dominance(self, message):
         try:
             response = self.session.get(self.url)
             data = json.loads(response.text)

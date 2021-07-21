@@ -1,5 +1,6 @@
 {
-  "spam-bot": {
+  "814159783677526036": {
+    "alias": "spam-bot",
     "allow": [
       "!stoic",
       "!carljung",
@@ -21,12 +22,14 @@
     ],
     "not_allow": []
   },
-  "ark": {
+  "829403779513974824": {
+    "alias": "ark",
     "allow": [
       "price",
       "!ava",
       "!pick",
       "!e",
+      "!xoa",
       "!bonk",
       "chaybo",
       "other"
@@ -35,7 +38,8 @@
       "all"
     ]
   },
-  "bỏ-suk-cak-nofap": {
+  "778713923859382343": {
+    "alias": "bỏ-suk-cak-nofap",
     "allow": [
       "!fap"
     ],
