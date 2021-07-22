@@ -16,7 +16,8 @@
   "help": [
     "`!ava tao`: Lấy avatar của mày\n",
     "`!ava may`: Lấy avatar của tao\n",
-    "`!stoic`: Lấy quote stoic ra đọc để tịnh tâm <:pray2:840209827325935616>\n",
+    "`!stoic`: Lấy quote ngẫu nhiên 1 quote stoic <:pray2:840209827325935616>\n",
+    "`!seneca <1 - 43>`: Lấy thư của seneca. Vd: Gõ `!seneca` để lấy thư ngẫu nhiên, gõ `!seneca 1` để lấy lá thư thứ 1\n",
     "`!tailieu`: Tổng hợp tài liệu từ Trở lại làm người\n",
     "`!carljung`: Lấy ngẫu nhiên quote của Carl Jung\n",
     "`!dh`: Tài liệu của Duy Huỳnh\n",

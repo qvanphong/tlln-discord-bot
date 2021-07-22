@@ -13,6 +13,44 @@ import env
 import http.client
 
 
+def is_regex_match(message_content, pattern):
+    return re.search(pattern, message_content, re.IGNORECASE) is not None
+
+
+def calculate_sleep_cycle(hour, minute, cycles, wake=False):
+    time = (hour * 60) + minute
+    time_cycles = 90 * cycles
+
+    if wake:
+        if time - time_cycles < 0:
+            result = 1440 + (time - time_cycles)
+        else:
+            result = time - time_cycles
+        result -= 15
+
+    else:
+        if time + time_cycles > 1440:
+            result = time + time_cycles - 1440
+        else:
+            result = time + time_cycles
+        result += 15
+
+    hour = math.trunc(result / 60)
+    minute = result % 60
+    return "** {:02d}:{:02d} **".format(hour, minute)
+
+
+def load_assets(file_name):
+    f = open('assets/' + file_name, encoding="utf8")
+    if f is None:
+        raise FileNotFoundError(file_name + " not found in assets folder")
+    else:
+        json_content = json.load(f)
+        print("Loaded " + file_name)
+        f.close()
+        return json_content
+
+
 class Responder:
     # Commands Regex
     prefix = '!'
@@ -23,6 +61,7 @@ class Responder:
     emoji_regex = r"<(a)?:\w*:[0-9]*>"
     compare_regex = r"^[0-9]*(\.[0-9]*)? [a-zA-Z]* = (\?|bn) [a-zA-Z]*$"
     ask_when_regex = r"khi nào .* [0-9]*"
+    seneca_regex = r"^!seneca( \d+)?$"
 
     # Instances
     coin_gecko = CoinGeckoAPI()  # coingecko instance
@@ -30,6 +69,7 @@ class Responder:
     responses = None  # list of commands response
     stoic_quotes = None  # list of stoic quotes
     carl_jung_quotes = None  # list of Carl Jung quotes
+    seneca_letters = None  # list of Seneca's letter
     url = 'https://pro-api.coinmarketcap.com/v1/global-metrics/quotes/latest'
     headers = {
         'Accepts': 'application/json',
@@ -51,17 +91,13 @@ class Responder:
             self.coin_gecko_map[coin['symbol']] = coin['id']
 
         # Open json and load responses
-        f = open('assets/responses.json', encoding="utf8")
-        self.responses = json.load(f)
-        f.close()
+        self.responses = load_assets("responses.json")
 
-        f = open('assets/stoic.json', encoding='utf8')
-        self.stoic_quotes = json.load(f)
-        f.close()
+        self.stoic_quotes = load_assets("stoic.json")
 
-        f = open('assets/carljung.json', encoding='utf8')
-        self.carl_jung_quotes = json.load(f)
-        f.close()
+        self.carl_jung_quotes = load_assets("carljung.json")
+
+        self.seneca_letters = load_assets("seneca.json")
 
         self.client = client
 
@@ -77,7 +113,7 @@ class Responder:
         data = await self.client.http.get_user_profile(id)
         return 'https://cdn.discordapp.com/avatars/{}/{}.png?size=1024'.format(str(id), data['user']['avatar'])
 
-    async def bad_behaviour(self, message):
+    async def send_bad_behaviour(self, message):
         # Bỏ bản thân mình ra ko thôi bị loop tới chết
         if message.author != self.client.user:
             if 'trade' in message.content.lower():
@@ -112,6 +148,24 @@ class Responder:
                                                                       source=selected_quote["source"]))
         else:
             await message.add_reaction(self.emoji_cross)
+
+    async def send_seneca_letters(self, message):
+        if self.seneca_letters is not None:
+            matches = re.search(self.seneca_regex, message.content, re.IGNORECASE)
+            if matches is not None:
+                splitted = matches.group().split()
+                if len(splitted) == 1:
+                    selected_letter = self.seneca_letters[randint(0, len(self.seneca_letters) - 1)]
+                    await message.add_reaction(self.emoji_check)
+                    await message.channel.send('>>> ' + selected_letter)
+                elif splitted[1].isnumeric():
+                    letter_number = int(splitted[1])
+                    if 0 < letter_number <= len(self.seneca_letters):
+                        await message.add_reaction(self.emoji_check)
+                        await message.channel.send('>>> ' + self.seneca_letters[letter_number - 1])
+                    else:
+                        await message.add_reaction(self.emoji_cross)
+                        await message.channel.send('>>> Sử dụng !seneca để lấy ngẫu nhiên hoặc !seneca <1 - 43> để lấy thư theo số mong muốn')
 
     # Gửi ngẫu nhiên 1 câu thoại của carl jung
     async def send_carl_jung_quote(self, message):
@@ -160,9 +214,8 @@ class Responder:
             else:
                 await message.channel.send('Không tìm thấy coin {}'.format(split[4].upper()))
 
-    async def send_sleep_time(self, message, isWake):
-        #     !sleep 21:00
-        if isWake:
+    async def send_sleep_time(self, message, is_wake_up):
+        if is_wake_up:
             time = message.content.split('!wake')[1]
         else:
             time = message.content.split('!sleep')[1]
@@ -181,12 +234,12 @@ class Responder:
                         result = ''
                         for cycle in range(6, 0, -1):
                             if cycle == 5 or cycle == 6:
-                                result += self.calulate_sleep_cycle(hour, minute, cycle, isWake) + " 👍\n"
+                                result += calculate_sleep_cycle(hour, minute, cycle, is_wake_up) + " 👍\n"
                             else:
-                                result += self.calulate_sleep_cycle(hour, minute, cycle, isWake) + "\n"
+                                result += calculate_sleep_cycle(hour, minute, cycle, is_wake_up) + "\n"
 
                         await message.add_reaction(self.emoji_check)
-                        if isWake:
+                        if is_wake_up:
                             await message.channel.send(
                                 ">>> Thời gian đi ngủ tối ưu nhất để thức dậy vào lúc {:02d}:{:02d}: \n{}" \
                                     .format(hour, minute, result))
@@ -198,28 +251,6 @@ class Responder:
 
         await message.add_reaction(self.emoji_cross)
         await message.channel.send('> Thời gian nhập vào không hợp lệ')
-
-    def calulate_sleep_cycle(self, hour, minute, cycles, wake=False):
-        time = (hour * 60) + minute
-        time_cycles = 90 * cycles
-
-        if wake:
-            if time - time_cycles < 0:
-                result = 1440 + (time - time_cycles)
-            else:
-                result = time - time_cycles
-            result -= 15
-
-        else:
-            if time + time_cycles > 1440:
-                result = time + time_cycles - 1440
-            else:
-                result = time + time_cycles
-            result += 15
-
-        hour = math.trunc(result / 60)
-        minute = result % 60
-        return "** {:02d}:{:02d} **".format(hour, minute)
 
     async def send_btc_dominance(self, message):
         try:
@@ -258,8 +289,23 @@ class Responder:
         await message.add_reaction(self.emoji_check)
         await message.channel.send(data.decode("utf-8"))
 
-    def is_regex_match(self, message_content, pattern):
-        return re.search(pattern, message_content, re.IGNORECASE) is not None
+    async def send_run_command(self, message):
+        run_command = "chaybo" if "!chaytrongphong" not in message.content else "chaytrongphong"
+        run_image_url = \
+            "https://cdn.discordapp.com/attachments/829403779513974824/861139558250709002/chaybobinhoi.gif" \
+                if "!chaytrongphong" not in message.content else \
+                "https://cdn.discordapp.com/attachments/829403779513974824/862269728998424606/chay-trong-phong.gif"
+
+        if len(message.mentions) > 0:
+            message_str = self.get_response_message(run_command)
+            tagged_users = []
+            for index in range(0, len(message.mentions)):
+                tagged_users.append(message.mentions[index].display_name)
+
+            await message.channel.send(
+                ">>> " + message_str.format(author=message.author.display_name,
+                                            tagged=', '.join(tagged_users)))
+            await message.channel.send(run_image_url)
 
     def get_response_message(self, command, get_all=False):
         if self.responses is not None:

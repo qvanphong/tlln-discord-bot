@@ -3,6 +3,7 @@
     "alias": "spam-bot",
     "allow": [
       "!stoic",
+      "!seneca",
       "!carljung",
       "!dmn",
       "!dh",
@@ -48,7 +49,7 @@
     ]
   },
   "all":  {
-    "allow": ["!dh", "!help", "!tailieu"],
+    "allow": ["!dh", "!stoic", "!pick", "!help", "!tailieu", "!seneca"],
     "not_allow": ["all"]
   }
 }

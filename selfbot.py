@@ -2,9 +2,9 @@ from random import randint
 
 import discord
 import env
+import responder
 from channel_permission import ChannelPermission
 from price_alert import PriceAlert
-from responder import Responder
 
 
 class DiscordCommandClient(discord.Client):
@@ -16,7 +16,7 @@ class DiscordCommandClient(discord.Client):
     async def on_ready(self):
         print('Logged on as', self.user)
 
-        self.responder = Responder(client)
+        self.responder = responder.Responder(client)
 
         # Comment if you don't want to use Binance price alert
         print('Starting price alert...')
@@ -41,6 +41,13 @@ class DiscordCommandClient(discord.Client):
                             await self.responder.send_stoic_quote(message)
                             return
 
+                    # seneca's letter
+                    if message.content.lower() == '!seneca':
+                        if self.permission.can_use_command(channel_id, "!seneca"):
+                            await self.responder.send_seneca_letters(message)
+                            return
+
+                    # carl jung's quotes
                     elif message.content.lower() == '!carljung':
                         if self.permission.can_use_command(channel_id, "!carljung"):
                             await self.responder.send_carl_jung_quote(message)
@@ -100,22 +107,7 @@ class DiscordCommandClient(discord.Client):
 
                     elif "!chaybo " in message.content or "!chaytrongphong" in message.content:
                         if self.permission.can_use_command(channel_id, "chaybo"):
-                            run_command = "chaybo" if "!chaytrongphong" not in message.content else "chaytrongphong"
-                            run_image_url = \
-                                "https://cdn.discordapp.com/attachments/829403779513974824/861139558250709002/chaybobinhoi.gif" \
-                                    if "!chaytrongphong" not in message.content else \
-                                    "https://cdn.discordapp.com/attachments/829403779513974824/862269728998424606/chay-trong-phong.gif"
-
-                            if len(message.mentions) > 0:
-                                message_str = self.responder.get_response_message(run_command)
-                                tagged_users = []
-                                for index in range(0, len(message.mentions)):
-                                    tagged_users.append(message.mentions[index].display_name)
-
-                                await message.channel.send(
-                                    ">>> " + message_str.format(author=message.author.display_name,
-                                                                tagged=', '.join(tagged_users)))
-                                await message.channel.send(run_image_url)
+                            await self.responder.send_run_command(message)
 
                     # xoa command
                     elif "!xoa" in message.content:
@@ -129,7 +121,7 @@ class DiscordCommandClient(discord.Client):
                     # pick command
                     elif '!pick' in message.content:
                         if self.permission.can_use_command(channel_id, "!pick") \
-                                and self.responder.is_regex_match(message.content,
+                                and responder.is_regex_match(message.content,
                                                                   self.responder.pick_regex):
                             answers = message.content.split('!pick ')[1:][0].split(',')
                             await message.channel.send(
@@ -143,7 +135,7 @@ class DiscordCommandClient(discord.Client):
                     # get emoji
                     elif '!e' in message.content:
                         if self.permission.can_use_command(channel_id, "!e") \
-                                and self.responder.is_regex_match(message.content,
+                                and responder.is_regex_match(message.content,
                                                                   self.responder.emoji_command_regex):
                             emoji_format = ".gif" if message.content.split(':')[0] == '<a' else ".png"
                             emoji_id = message.content.split(':')[2][:-1]
@@ -178,7 +170,7 @@ class DiscordCommandClient(discord.Client):
                     if len(message.content) > 0 and message.content[0] == '?':
                         await self.responder.send_coin_price(message)
                     #  so sánh giá trị giữa 2 coin
-                    if self.responder.is_regex_match(message.content, self.responder.compare_regex):
+                    if responder.is_regex_match(message.content, self.responder.compare_regex):
                         await self.responder.send_coins_compare(message)
                         return
 
@@ -186,11 +178,11 @@ class DiscordCommandClient(discord.Client):
                 if self.permission.can_use_command(channel_id, "other"):
                     #  Nếu có message hỏi "Khi nào xxx 30"
                     if 'khi nào' in message.content.lower():
-                        if self.responder.is_regex_match(message.content, self.responder.ask_when_regex):
+                        if responder.is_regex_match(message.content, self.responder.ask_when_regex):
                             await self.responder.send_response_message('ask_price', message)
                             return
 
-                    await self.responder.bad_behaviour(message)
+                    await self.responder.send_bad_behaviour(message)
 
                     # Đập Bắn Đấm
                     if 'đập' in message.content.lower():
