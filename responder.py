@@ -11,6 +11,7 @@ import io
 import math
 import env
 import http.client
+import random
 
 
 def is_regex_match(message_content, pattern):
@@ -62,6 +63,7 @@ class Responder:
     compare_regex = r"^[0-9]*(\.[0-9]*)? [a-zA-Z]* = (\?|bn) [a-zA-Z]*$"
     ask_when_regex = r"khi nào .* [0-9]*"
     seneca_regex = r"^!seneca( \d+)?$"
+    sort_regex = r"^\!sort (<@[!]?[0-9]*>(\s)?){1,}$"
 
     # Instances
     coin_gecko = CoinGeckoAPI()  # coingecko instance
@@ -153,19 +155,20 @@ class Responder:
         if self.seneca_letters is not None:
             matches = re.search(self.seneca_regex, message.content, re.IGNORECASE)
             if matches is not None:
-                splitted = matches.group().split()
-                if len(splitted) == 1:
+                message_fragment = matches.group().split()
+                if len(message_fragment) == 1:
                     selected_letter = self.seneca_letters[randint(0, len(self.seneca_letters) - 1)]
-                    await message.add_reaction(self.emoji_check)
-                    await message.channel.send('>>> ' + selected_letter)
-                elif splitted[1].isnumeric():
-                    letter_number = int(splitted[1])
-                    if 0 < letter_number <= len(self.seneca_letters):
-                        await message.add_reaction(self.emoji_check)
-                        await message.channel.send('>>> ' + self.seneca_letters[letter_number - 1])
-                    else:
-                        await message.add_reaction(self.emoji_cross)
-                        await message.channel.send('>>> Sử dụng !seneca để lấy ngẫu nhiên hoặc !seneca <1 - 43> để lấy thư theo số mong muốn')
+                elif message_fragment[1].isnumeric() and 0 < int(message_fragment[1]) <= len(self.seneca_letters):
+                    # message_fragment[1] is the number that use passed in
+                    selected_letter = self.seneca_letters[int(message_fragment[1]) - 1]
+                else:
+                    await message.add_reaction(self.emoji_cross)
+                    await message.channel.send(
+                        '>>> Sử dụng !seneca để lấy ngẫu nhiên hoặc !seneca <1 - 112> để lấy thư theo số mong muốn')
+                    return
+
+                await message.add_reaction(self.emoji_check)
+                await message.channel.send(">>> **{}**: \n {}".format(selected_letter["title"], selected_letter["slug"]))
 
     # Gửi ngẫu nhiên 1 câu thoại của carl jung
     async def send_carl_jung_quote(self, message):
@@ -175,6 +178,15 @@ class Responder:
             await message.channel.send('> **"{quote}"**'.format(quote=selected_quote))
         else:
             await message.add_reaction(self.emoji_cross)
+
+    async def send_sorted_users(self, message):
+        if len(message.mentions) != 0:
+            random.shuffle(message.mentions)
+            sorted_users = ""
+            for index, val in enumerate(message.mentions):
+                sorted_users += "**{}**. {}\n".format(index + 1, val.display_name)
+
+            await message.channel.send(">>> " + sorted_users)
 
     async def send_coin_price(self, message):
         if message.content.lower() == '?tim':

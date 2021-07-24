@@ -19,9 +19,9 @@ class DiscordCommandClient(discord.Client):
         self.responder = responder.Responder(client)
 
         # Comment if you don't want to use Binance price alert
-        print('Starting price alert...')
         self.binance_ws = PriceAlert(client)
         await self.binance_ws.start()
+        print('Started price alert')
 
     async def on_message(self, message):
         # Loại log lỗi do message ko rõ tới từ server/channel nào
@@ -42,7 +42,7 @@ class DiscordCommandClient(discord.Client):
                             return
 
                     # seneca's letter
-                    if message.content.lower() == '!seneca':
+                    if '!seneca' in message.content.lower():
                         if self.permission.can_use_command(channel_id, "!seneca"):
                             await self.responder.send_seneca_letters(message)
                             return
@@ -98,6 +98,11 @@ class DiscordCommandClient(discord.Client):
                             await self.responder.send_response_message("tailieu", message)
                             return
 
+                    elif message.content == "!noichu":
+                        if self.permission.can_use_command(channel_id, "!noichu"):
+                            await self.responder.send_response_message("noichu", message)
+                            return
+
                     elif message.content == "!chaybobinhoi":
                         if self.permission.can_use_command(channel_id, "chaybo"):
                             await self.responder.send_response_message("chaybobinhoi", message)
@@ -118,11 +123,15 @@ class DiscordCommandClient(discord.Client):
                         if self.permission.can_use_command(channel_id, "!bonk"):
                             await self.responder.create_gif_emoji(message, "bonk")
 
+                    elif "!sort" in message.content:
+                        # Free for all channel, since no one gonna use it... lol
+                        await self.responder.send_sorted_users(message)
+
                     # pick command
                     elif '!pick' in message.content:
                         if self.permission.can_use_command(channel_id, "!pick") \
                                 and responder.is_regex_match(message.content,
-                                                                  self.responder.pick_regex):
+                                                             self.responder.pick_regex):
                             answers = message.content.split('!pick ')[1:][0].split(',')
                             await message.channel.send(
                                 '> {}'.format(answers[randint(0, len(answers) - 1)].lstrip()))
@@ -136,7 +145,7 @@ class DiscordCommandClient(discord.Client):
                     elif '!e' in message.content:
                         if self.permission.can_use_command(channel_id, "!e") \
                                 and responder.is_regex_match(message.content,
-                                                                  self.responder.emoji_command_regex):
+                                                             self.responder.emoji_command_regex):
                             emoji_format = ".gif" if message.content.split(':')[0] == '<a' else ".png"
                             emoji_id = message.content.split(':')[2][:-1]
                             if id is not None:
