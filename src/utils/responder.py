@@ -65,6 +65,7 @@ class Responder:
     ask_when_regex = r"khi nào .* [0-9]*"
     seneca_regex = r"^!seneca( \d+)?$"
     sort_regex = r"^\!sort (<@[!]?[0-9]*>(\s)?){1,}$"
+    random_regex = r"^\!random \d+ \d+( exclude)?$"
 
     # Instances
     coin_gecko = CoinGeckoAPI()  # coingecko instance
