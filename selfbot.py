@@ -2,8 +2,7 @@ from random import randint
 
 import discord
 from src.utils import env, responder
-from src.channel_permission import ChannelPermission
-from src.price_alert import PriceAlert
+from src.utils.channel_permission import ChannelPermission
 
 
 class DiscordCommandClient(discord.Client):
