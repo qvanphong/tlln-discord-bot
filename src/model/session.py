@@ -9,8 +9,13 @@ class Session:
 
     def __init__(self, creator, create_time):
         self.creator = creator
-        self.add_player(creator)
+        self.players = []
+        self.players_id = []
+        self.current_player_turn = None
+        self.previous_answer = ""
+        self.is_started = False
         self.last_updated = create_time
+        self.add_player(creator)
 
     def add_player(self, player):
         if self._add_player_id(player.id):
@@ -49,8 +54,13 @@ class Session:
         else:
             self.current_player_turn = self.players[index + 1]
 
-    def set_player_turn(self, id):
+    def set_player_turn(self, player_id):
         for player in self.players:
-            if player.id == id:
+            if player.id == player_id:
                 self.current_player_turn = player
                 return
+
+    def reset_except_player(self):
+        self.current_player_turn = None
+        self.previous_answer = ""
+        self.is_started = False

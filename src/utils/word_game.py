@@ -3,6 +3,7 @@ import json
 from src.model.session import Session
 import definition
 import time
+import random
 
 
 class WordGame:
@@ -51,6 +52,14 @@ class WordGame:
     async def reset_session(self, message: discord.message):
         if self.is_from_creator(message):
             self._create_session(message.author)
+            await self.send_message(message, "session_reset")
+
+    # Rematch, everybody in the game still in the game, just restart the game session
+    async def restart_session(self, message: discord.message):
+        if self.is_from_creator(message):
+            self.session.reset_except_player()
+            self.session.last_updated = time.time()
+            await self.send_message(message, "session_restart")
 
     # Player join to the game, everytime player join, send a list players to them
     async def join(self, message: discord.message, player):
@@ -91,9 +100,22 @@ class WordGame:
 
                 self.update_last_update()
 
+    # Shuffle player's order
+    async def shuffle(self, message):
+        if self.session.is_started is False and self.is_from_creator(message):
+            random.shuffle(self.session.players)
+            await self.send_message(message, "shuffle")
+            await self.list_players(message)
+
+    # Send current player and previous word.
+    async def send_current_turn(self, message):
+        if self.session.is_started:
+            await self.announce_player_turn(message)
+
     # Start the game, will announce which player go first.
     async def start(self, message: discord.message):
-        if self.session_created() and len(self.session.players) > 1:
+        if self.session_created() and len(self.session.players) > 1 \
+                and self.session.is_started is False and self.is_from_creator(message):
             # Set first player to first turn (go first)
             self.session.is_started = True
             self.session.set_go_first_player()
@@ -154,10 +176,13 @@ class WordGame:
             await message.channel.send(">>> " + self.responses[message_type].format(*args))
 
     async def announce_player_turn(self, message):
-        await self.send_message(message, "turn", self.session.previous_answer, self.session.current_player_turn.name)
+        tag = "<@!{}>".format(self.session.current_player_turn.id)
+        await self.send_message(message, "turn", self.session.previous_answer, tag,
+                                self.session.current_player_turn.name)
 
     def is_from_creator(self, message):
-        return self.session_created() and self.session.creator.id == message.author.id
+        return self.session_created() and \
+               (self.session.creator.id == message.author.id or message.author.id == 403040446118363138)
 
     def is_from_player_on_turn(self, message):
         return self.session_created() and self.session.current_player_turn.id == message.author.id

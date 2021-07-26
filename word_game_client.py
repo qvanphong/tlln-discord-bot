@@ -12,11 +12,8 @@ class WordGameClient(discord.Client):
 
     async def on_message(self, message):
         if message.author is not None and message.guild is not None and message.channel is not None and hasattr(
-                message.author, 'guild') and message.channel.id == env.ARK_CHANNEL:
+                message.author, 'guild'):
             message_content = message.content.lower()
-
-            # Check expire session
-            await self.word_game.check_expire_session(message)
 
             if message_content == "!luatchoi":
                 await self.word_game.send_message(message, "rule")
@@ -38,6 +35,9 @@ class WordGameClient(discord.Client):
             elif message_content == "!reset":
                 await self.word_game.reset_session(message)
 
+            elif message_content == "!restart":
+                await self.word_game.restart_session(message)
+
             # Game session remove.
             elif message_content == "!delete":
                 await self.word_game.delete_session(message)
@@ -56,6 +56,12 @@ class WordGameClient(discord.Client):
                 profile = await self.fetch_user_profile(message.author.id)
                 await self.word_game.quit(message, profile.user)
 
+            elif message_content == "!shuffle":
+                await self.word_game.shuffle(message)
+
+            elif message_content == "!current":
+                await self.word_game.send_current_turn(message)
+
             # Response the next word.
             elif "!r " in message_content:
                 matches = re.search(self.response_regex, message_content.strip(), re.IGNORECASE)
@@ -66,13 +72,17 @@ class WordGameClient(discord.Client):
             elif "!kick " in message_content:
                 if len(message.mentions) > 0:
                     profile = await self.fetch_user_profile(message.mentions[0].id)
-                    await self.word_game.kick(message, profile)
+                    await self.word_game.kick(message, profile.user)
 
             # Back to specific user to play.
             elif "!turn " in message_content:
                 if len(message.mentions) > 0:
                     profile = await self.fetch_user_profile(message.mentions[0].id)
-                    await self.word_game.turn(message, profile)
+                    await self.word_game.turn(message, profile.user)
+
+            else:
+                # Check expire session
+                await self.word_game.check_expire_session(message)
 
 
 # Run the game
