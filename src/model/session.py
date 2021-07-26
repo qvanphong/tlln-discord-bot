@@ -5,10 +5,12 @@ class Session:
     current_player_turn = None
     previous_answer = ""
     is_started = False
+    last_updated = None
 
-    def __init__(self, creator):
+    def __init__(self, creator, create_time):
         self.creator = creator
         self.add_player(creator)
+        self.last_updated = create_time
 
     def add_player(self, player):
         if self._add_player_id(player.id):

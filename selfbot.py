@@ -1,6 +1,8 @@
 from random import randint
 
 import discord
+
+from src.price_alert import PriceAlert
 from src.utils import env, responder, advanced_random
 from src.utils.channel_permission import ChannelPermission
 
@@ -18,9 +20,9 @@ class DiscordCommandClient(discord.Client):
         self.responder = responder.Responder(client)
 
         # Comment if you don't want to use Binance price alert
-        # self.binance_ws = PriceAlert(client)
-        # await self.binance_ws.start()
-        # print('Started price alert')
+        self.binance_ws = PriceAlert(client)
+        await self.binance_ws.start()
+        print('Started price alert')
 
     async def on_message(self, message):
         # Loại log lỗi do message ko rõ tới từ server/channel nào
@@ -191,18 +193,18 @@ class DiscordCommandClient(discord.Client):
                                                                channel_id=message.channel.id, author=profile)
                             await message.channel.send(
                                 ">>> Đã tạo phiên quay số không bị trùng, "
-                                "gõ !random để bắt đầu quay số, gỡ !stoprandom để xoa phiên quay số.")
+                                "gõ `!random` để bắt đầu quay số, gõ `!stoprandom` để xóa phiên quay số nếu không cần dùng nữa.")
                         else:
                             random_number = advanced_random.get_random_number(minimum, maximum)
-                            await message.channel.send(">>> Số ngẫu nhiên: {}".format(random_number))
+                            await message.channel.send(">>> Số ngẫu nhiên: **{}**".format(random_number))
 
                     elif message.content.lower() == "!random":
                         number = self.randomizer.get_random_with_exclude(message.author)
                         if number is not None:
                             random_number = number[0]
                             excluded_number = number[1]
-                            await message.channel.send(">>> Số ngẫu nhiên: {}".format(random_number))
-                            await message.channel.send(">>> Các số đã ra trước đó: {}".format(excluded_number))
+                            await message.channel.send(">>> Số ngẫu nhiên: **{}**".format(random_number))
+                            await message.channel.send(">>> Các số đã ra trước đó: **{}**".format(excluded_number))
 
                     elif "!stoprandom" in message.content.lower():
                         if self.randomizer.remove_random_session(message.author):

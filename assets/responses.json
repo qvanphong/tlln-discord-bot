@@ -31,6 +31,7 @@
     "`!e <emoji>`: lấy ảnh gốc của emoji\n",
     "`!wake <hour>:<minute>`: Tìm thời gian đi ngủ phù hợp khi thức dậy với giờ đã cho, giờ được định dạng 24 giờ (vd: !wake 7:00)\n",
     "`!sleep <hour>:<minute>`: Tìm thời gian thức dậy phù hợp giờ ngủ đã cho, giờ được định dạng 24 giờ (vd: !sleep 22:00)\n",
+    "`!random <min> <max>`: Ra ngẫu nhiên 1 số trong khoảng từ <min> tới <max>\n",
     "`số <coins> = ? <coins>`: Tính tỉ lệ giữa 2 coin (ví dụ: 1 GAS = ? NEO)\n",
     "`?coin`: lấy giá hiện tại của coin (vd: ?ark lấy giá ark hiện tại 30$) 💵"
   ],

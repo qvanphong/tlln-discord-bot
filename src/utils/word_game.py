@@ -2,6 +2,7 @@ import discord.client
 import json
 from src.model.session import Session
 import definition
+import time
 
 
 class WordGame:
@@ -14,10 +15,20 @@ class WordGame:
     # Discord's Client
     client = None
 
+    # Session expire time
+    expire_time = 300
+
     def __init__(self, client: discord.Client):
         self.client = client
         f = open(definition.get_path('assets/word_game_responses.json'), encoding="utf8")
         self.responses = json.load(f)
+
+    async def check_expire_session(self, message):
+        if self.session_created():
+            current_time = time.time()
+            if current_time - self.session.last_updated >= self.expire_time:
+                self.session = None
+                await self.send_message(message, "session_expire")
 
     # Create a game session, assign creator to session object
     async def create_session(self, message: discord.message):
@@ -47,8 +58,12 @@ class WordGame:
             if player is not None:
                 self.session.add_player(player)
                 await self.list_players(message)
+
+                self.update_last_update()
             else:
                 await self.send_message(message, "player_join_fail")
+        else:
+            await self.send_message(message, "no_session_to_join")
 
     async def quit(self, message, player):
         if self.session_created() and player is not None:
@@ -61,6 +76,8 @@ class WordGame:
             if self.session.remove_player(player.id):
                 await self.send_message(message, "kicked", player.name)
                 await self.list_players(message)
+
+                self.update_last_update()
         else:
             await self.send_message(message, "kicked_not_found")
 
@@ -72,6 +89,8 @@ class WordGame:
                 self.session.previous_answer = ""
                 await self.send_message(message, "answer_again", self.session.current_player_turn.name)
 
+                self.update_last_update()
+
     # Start the game, will announce which player go first.
     async def start(self, message: discord.message):
         if self.session_created() and len(self.session.players) > 1:
@@ -82,6 +101,7 @@ class WordGame:
             await self.send_message(message, "game_start")
             await self.announce_player_turn(message)
 
+            self.update_last_update()
         elif len(self.session.players) <= 1:
             await self.send_message(message, "one_player_game_start")
 
@@ -96,6 +116,8 @@ class WordGame:
                 self.session.previous_answer = answer
                 self.session.set_next_player_turn()
                 await self.announce_player_turn(message)
+
+                self.update_last_update()
             else:
                 # Validate the previous answer and current answer
                 split_answer = answer.split()
@@ -106,6 +128,8 @@ class WordGame:
                     self.session.previous_answer = answer
                     self.session.set_next_player_turn()
                     await self.announce_player_turn(message)
+
+                    self.update_last_update()
                 else:
                     await self.send_message(message, "no_match_word", last_word_from_previous)
 
@@ -115,10 +139,11 @@ class WordGame:
         for index, player in enumerate(self.session.players):
             players_message += "{}. **{}**\n".format(index + 1, player.name)
         await message.channel.send(players_message)
+        self.update_last_update()
 
     # Create game session
     def _create_session(self, creator):
-        self.session = Session(creator)
+        self.session = Session(creator, time.time())
 
     # Send a message with specific message_type
     # check word_game_response.json, the key is message_type
@@ -139,3 +164,7 @@ class WordGame:
 
     def session_created(self):
         return self.session is not None
+
+    # Update last update time
+    def update_last_update(self):
+        self.session.last_updated = time.time()

@@ -1,7 +1,7 @@
 import discord
 from src.utils import env, word_game
 import re
-
+import asyncio
 
 class WordGameClient(discord.Client):
     word_game = None
@@ -19,59 +19,61 @@ class WordGameClient(discord.Client):
                 await self.word_game.send_message(message, "rule")
                 return
 
-            if message_content == "!huongdan":
+            elif message_content == "!huongdan":
                 await self.word_game.send_message(message, "tutorial")
                 return
 
             # Create game session command
-            if message_content == "!create":
+            elif message_content == "!create":
                 await self.word_game.create_session(message)
 
             # Start word game command
-            if message_content == "!start":
+            elif message_content == "!start":
                 await self.word_game.start(message)
 
             # Reset the game, delete all players that joined the queue
-            if message_content == "!reset":
+            elif message_content == "!reset":
                 await self.word_game.reset_session(message)
 
             # Game session remove.
-            if message_content == "!delete":
+            elif message_content == "!delete":
                 await self.word_game.delete_session(message)
 
             # List all joined players
-            if message_content == "!list":
+            elif message_content == "!list":
                 await self.word_game.list_players(message)
 
             # Player join the game.
-            if message_content == "!join":
+            elif message_content == "!join":
                 profile = await self.fetch_user_profile(message.author.id)
                 await self.word_game.join(message, profile.user)
 
             # Player quit the game
-            if message_content == "!quit":
+            elif message_content == "!quit":
                 profile = await self.fetch_user_profile(message.author.id)
                 await self.word_game.quit(message, profile.user)
 
             # Response the next word.
-            if "!r " in message_content:
+            elif "!r " in message_content:
                 matches = re.search(self.response_regex, message_content.strip(), re.IGNORECASE)
                 if matches is not None:
                     await self.word_game.response_answer(message, message_content.split("!r ")[1].strip())
 
             # Kick someone out the queue
-            if "!kick " in message_content:
+            elif "!kick " in message_content:
                 if len(message.mentions) > 0:
                     profile = await self.fetch_user_profile(message.mentions[0].id)
                     await self.word_game.kick(message, profile)
 
             # Back to specific user to play.
-            if "!turn " in message_content:
+            elif "!turn " in message_content:
                 if len(message.mentions) > 0:
                     profile = await self.fetch_user_profile(message.mentions[0].id)
                     await self.word_game.turn(message, profile)
 
-
+            # Check expire session
+            else:
+                await self.word_game.check_expire_session(message)
 
 # Run the game
 WordGameClient().run(env.TOKEN)
