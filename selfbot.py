@@ -1,10 +1,9 @@
 from random import randint
 
 import discord
-import env
-import responder
-from channel_permission import ChannelPermission
-from price_alert import PriceAlert
+from src.utils import env, responder
+from src.channel_permission import ChannelPermission
+from src.price_alert import PriceAlert
 
 
 class DiscordCommandClient(discord.Client):
@@ -19,9 +18,9 @@ class DiscordCommandClient(discord.Client):
         self.responder = responder.Responder(client)
 
         # Comment if you don't want to use Binance price alert
-        self.binance_ws = PriceAlert(client)
-        await self.binance_ws.start()
-        print('Started price alert')
+        # self.binance_ws = PriceAlert(client)
+        # await self.binance_ws.start()
+        # print('Started price alert')
 
     async def on_message(self, message):
         # Loại log lỗi do message ko rõ tới từ server/channel nào

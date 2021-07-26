@@ -1,5 +1,7 @@
 from random import randint
 
+from src.utils import env
+import definition
 from requests import Session
 from requests.exceptions import ConnectionError, Timeout, TooManyRedirects
 from pycoingecko import CoinGeckoAPI
@@ -9,7 +11,6 @@ import json
 import requests
 import io
 import math
-import env
 import http.client
 import random
 
@@ -42,7 +43,7 @@ def calculate_sleep_cycle(hour, minute, cycles, wake=False):
 
 
 def load_assets(file_name):
-    f = open('assets/' + file_name, encoding="utf8")
+    f = open(definition.get_path('assets/' + file_name), encoding="utf8")
     if f is None:
         raise FileNotFoundError(file_name + " not found in assets folder")
     else:

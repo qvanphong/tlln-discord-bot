@@ -1,6 +1,7 @@
 from tinydb import TinyDB, Query
+import definition
 
-db = TinyDB('db/price_db.json')
+db = TinyDB(definition.get_path('db/price_db.json'))
 price_query = Query()
 
 

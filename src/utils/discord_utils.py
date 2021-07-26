@@ -1,4 +1,4 @@
-import env
+from src.utils import env
 
 
 def get_channel_id(name):

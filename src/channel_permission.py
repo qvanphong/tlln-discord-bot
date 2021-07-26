@@ -1,11 +1,12 @@
 import json
+import definition
 
 
 class ChannelPermission:
     channels = None
 
     def __init__(self):
-        f = open("assets/permission.json", "r", encoding="utf8")
+        f = open(definition.get_path("assets/permission.json"), "r", encoding="utf8")
         self.channels = json.load(f)
         f.close()
 

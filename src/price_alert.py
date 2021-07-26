@@ -1,8 +1,7 @@
-import price_repository as price_db
+from src.repository import price_repository as price_db
+from src.utils import env, discord_utils
 import tornado.websocket
 import json
-import env
-import discord_utils
 
 try:
     import thread

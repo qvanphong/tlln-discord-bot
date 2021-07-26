@@ -1,9 +1,9 @@
 import discord
-import env
 import re
-from responder import Responder
+from src.utils.responder import Responder
 import emojis
-import reaction_repository
+from src.repository import reaction_repository
+from src.utils import env
 
 
 async def send_success_message(message):

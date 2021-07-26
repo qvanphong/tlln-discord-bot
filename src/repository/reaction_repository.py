@@ -1,7 +1,8 @@
 from tinydb import TinyDB, Query
 from tinydb.operations import delete
+import definition
 
-db = TinyDB('db/reaction.json')
+db = TinyDB(definition.get_path('db/reaction.json'))
 reaction_query = Query()
 
 

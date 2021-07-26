@@ -1,0 +1,18 @@
+{
+  "session_existed": "Phòng chơi đã được tạo, không thể tạo thêm.",
+  "session_created": "Phòng chơi đã được tạo, **{}** là chủ phòng chơi. ",
+  "session_create_error": "Có lỗi khi tạo phòng chơi, vui lòng thử lại.",
+  "session_deleted": "Phòng chơi đã được xóa, người chơi khác có thể tạo phòng chơi mới.",
+  "session_reset": "Phòng chơi đã được reset, tất cả các người chơi đã tham gia trước đó vui lòng tham gia lại.",
+  "player_join_fail": "Có lỗi khi tham gia, vui lòng thử lại.",
+  "game_start": "Game start!",
+  "one_player_game_start": "Chơi 1 mình lấy gì chơi ba =)), kiếm thêm người đi",
+  "turn": "Từ trước đó: **{}** \nLượt của **{}**",
+  "no_match_word": "Không tìm thấy từ **{}** dựa trên câu trả lời trước",
+  "answer_again": "**{}** hãy trả lời lại",
+  "kicked": "**{}** đã được mời ra khỏi phòng",
+  "kicked_not_found": "Không tìm thấy trong danh sách người chơi. Nên không mời ra được hmu hmu.",
+  "quit": "**{}** đã rời trò chơi.",
+  "rule": "LUẬT CHƠI\n- trả lời trong 15s\n- chơi ít nhất 2 vòng\n- không phải là từ nước ngoài hoặc phiên âm nước ngoài\n- không phải là từ lặp (vd: ngu ngu, khinh khinh,...)\n- không phải tên riêng\n- có thể đảo từ\nVd: Con bò có thể đổi thành bò con\n- 1 từ không được lập quá 2 lần\n- từ cấm: gái gú, giới thiệu\n- Chỉ đc dùng danh từ, động từ, tính từ\nvd: ăn uống chứ ko đc ăn cam, ăn bưởi; đi đứng, đi lại chứ ko đc đi học, đi chơi nhé!\n- Không được lấy những từ quá khó hiểu, vô nghĩa\nnếu từ nó là từ chuyên môn thì phải đưa LINK.\n\nCHIA GIẢI\n- người nào thắng từ 0.2 ark trở lên phải chia cho trọng tài 0.1 ark \n- nếu có từ 2 người thắng từ 0.1 ark trở lên thì\n1 trong những người đó phải chia 0.1 ark cho trọng tài\n- làm trọng tài dc tip 0.1 ark\n- phát hiện lỗi sai dc tặng 0.1 ark từ người đưa ra đáp án đó\n\nCẤM\n- ai nhắc phạt 0.1 ark\n- ai bí thì phải tip 0.1 ark cho người ra chữ làm mình bí\n- ko dùng tool ( các trang tìm kiếm)",
+  "tutorial": "Hướng dẫn:\n\nĐể tạo 1 phòng chơi, hãy gõ `!create`, người tạo phòng chơi là chủ phòng của phòng chơi đó.\nHiện tại chỉ có thể tạo 1 phòng chơi trong cả server, nên khi chơi xong hãy gõ `!delete` cho người khác tạo phòng mới <:unicorn:844654454786490438>\n\nHướng dẫn cho chủ phòng:\n`!start`: để bắt đầu\n`!kick @user`: để mời người được tag ra khỏi phòng chơi\n`!reset`: reset lại phòng chơi, người dùng toàn bộ trong phòng đều bị mời ra.\n`!turn @user`: thay đổi lượt chơi hiện tại cho người chơi được tag.\n`!delete`: xóa phòng hiện tại. (Hãy !delete khi chơi xong nhé <:unicorn:844654454786490438> )\n\nHướng dẫn người chơi:\n`!join`: để tham gia phòng chơi\n`!r`: để trả lời cho đợt của mình, ví dụ trả lời bánh mì trong lượt chơi của mình: `!r bánh mì`\n`!quit`: thoát phòng chơi\n\nHướng dẫn chung:\n`!luatchoi`: để đọc luật chơi (Luật chơi do nhóm quyết định, nên nếu có thay đổi hãy tag Bot Cơm vào)\n`!huongdan`: để đọc hướng dẫn"
+}
