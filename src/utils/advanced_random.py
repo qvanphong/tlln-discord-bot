@@ -31,10 +31,15 @@ class AdvancedRandom:
     def add_random_session(self, minimum, maximum, channel_id, author):
         index = self.get_author_index(author)
         if index == -1:
-            random_model = AdvancedRandomModel(minimum=int(minimum), maximum=int(maximum), owner=author, channel_id=channel_id)
+            random_model = AdvancedRandomModel(minimum=int(minimum),
+                                               maximum=int(maximum),
+                                               owner=author,
+                                               channel_id=channel_id)
             self.random_sessions.append(random_model)
         else:
-            self.random_sessions[index] = AdvancedRandomModel(minimum=minimum, maximum=maximum, owner=author,
+            self.random_sessions[index] = AdvancedRandomModel(minimum=int(minimum),
+                                                              maximum=int(maximum),
+                                                              owner=author,
                                                               channel_id=channel_id)
 
     def remove_random_session(self, author):

@@ -1,7 +1,6 @@
 class AdvancedRandomModel:
     minimum = 0
     maximum = 100
-    exclude = []
     owner = None
     channel_id = None
 
@@ -10,4 +9,5 @@ class AdvancedRandomModel:
         self.minimum = minimum
         self.maximum = maximum
         self.channel_id = channel_id
+        self.exclude = []
 
