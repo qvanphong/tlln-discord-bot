@@ -15,6 +15,9 @@ class WordGameClient(discord.Client):
                 message.author, 'guild') and message.channel.id == env.ARK_CHANNEL:
             message_content = message.content.lower()
 
+            # Check expire session
+            await self.word_game.check_expire_session(message)
+
             if message_content == "!luatchoi":
                 await self.word_game.send_message(message, "rule")
                 return
@@ -71,9 +74,6 @@ class WordGameClient(discord.Client):
                     profile = await self.fetch_user_profile(message.mentions[0].id)
                     await self.word_game.turn(message, profile)
 
-            # Check expire session
-            else:
-                await self.word_game.check_expire_session(message)
 
 # Run the game
 WordGameClient().run(env.TOKEN)
