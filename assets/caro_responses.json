@@ -1,0 +1,18 @@
+{
+  "win_point_lower": "Số điểm để thắng phải nhỏ hơn chiều dài hoặc rộng",
+  "play_alone": "Sao tự chơi 1 mình vậy <:boomer:780547751255343225>",
+  "game_created": "Đã tạo phòng đấu caro: ** <@!{}> vs <@!{}> **",
+  "game_stopped": "Đã dừng phòng đấu caro, không có ai thắng.",
+  "not_in_any_game": "Bạn không có trong phòng đấu caro nào cả.",
+  "in_other_game": "Một trong 2 người chơi đang trong 1 trận caro khác. Vui lòng `!quit` trước khi chơi ở phòng khác",
+  "surrender": "<@!{}> đã đầu hàng.\n<@!{}> thắng!",
+  "win": "Xin chúc mừng, <@!{}> đã chiến thắng 🎉",
+  "board_full": "Đã hết ô để đánh. Ván này hòa.",
+  "invalid_turn": "Nước đi vừa rồi đã được sử dụng trước đó, hãy chọn lại nước đi khác.",
+  "not_your_turn": "<:stop:828369142766764034> Không phải lượt của bạn. <@!{}>",
+  "player_turn": "Lượt của <@!{}>, gõ `!caro YX` để di chuyển",
+  "board_info": ">>> Thông tin bàn caro:\nChiều rộng: **{}** \nChiều cao: **{}** \nSố điểm để thắng: **{}**.",
+  "tutorial": "Hướng dẫn caro:\n\nĐể tí thỉ người chơi, hãy gõ `!caro @user <chiều rộng> <chiều cao> <số điểm để thắng>`.\nHoặc `!caro @user` để sử dụng ván mặc định.\nNếu không chơi nữa hãy gõ `!caro stop` (Khi người 1 người chơi thoát hoặc đầu hàng, phòng chơi sẽ tự động xóa nên không cần gõ `!caro stop`).\n\nHướng dẫn cho chủ phòng:\n`!caro @user`: Tí thỉ với người chơi được tag với layout trò chơi mặc định\n`!caro @user <chiều rộng> <chiều cao> <số điểm để thắng>`: Có thể tùy chỉnh chiều dài, rộng của bảng caro bằng cách nhập số của chiều dài, rộng, số nước thắng.\nVí dụ layout game 4x5 (dài 4 ô, rộng 5 ô), số nước thắng để thắng là 3. ta gõ `!caro @user 5 4 3`\n`!caro stop`: Để dừng game.\n\nHướng dẫn người chơi:\n`!caro board`: Hiện thị bảng đấu, thông tin bảng đấu và lượt chơi hiện tại\n`!caro surrender`: Đầu hàng, người chơi còn lại sẽ thắng\n`!caro YX`: để đánh ở vị trí cụ thể, ví dụ: đánh ở vị trí E5 (hàng E, cột 5), sử dụng `!caro E5`\n\nHướng dẫn chung:\n`!caro leaderboard`: để xem xếp hạng (đang phát triển)\n`!caro huongdan`: để đọc hướng dẫn",
+  "out_of_range": "Chiều dài, rộng phải trong khoảng 1 - 26"
+}
+
