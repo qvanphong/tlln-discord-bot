@@ -1,7 +1,6 @@
 import discord
 from src.utils import env, word_game
 import re
-import asyncio
 
 class WordGameClient(discord.Client):
     word_game = None
@@ -25,7 +24,8 @@ class WordGameClient(discord.Client):
 
             # Create game session command
             elif message_content == "!create":
-                await self.word_game.create_session(message)
+                profile = await self.fetch_user_profile(message.author.id)
+                await self.word_game.create_session(message, profile.user)
 
             # Start word game command
             elif message_content == "!start":

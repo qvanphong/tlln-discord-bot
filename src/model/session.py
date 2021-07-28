@@ -60,6 +60,10 @@ class Session:
                 self.current_player_turn = player
                 return
 
+    def set_new_owner(self):
+        if len(self.players) >= 1:
+            self.creator = self.players[0]
+
     def reset_except_player(self):
         self.current_player_turn = None
         self.previous_answer = ""

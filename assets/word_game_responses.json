@@ -1,11 +1,12 @@
 {
   "session_existed": "Phòng chơi đã được tạo, không thể tạo thêm.",
-  "session_created": "Phòng chơi đã được tạo, **{}** là chủ phòng chơi. Gõ `!huongdan` để đọc hướng dẫn\n(Hãy gõ `!delete` sau khi chơi xong hoặc không sử dụng phòng chơi nữa)",
+  "session_created": "Phòng chơi đã được tạo, <@!{}> là chủ phòng chơi. Gõ `!huongdan` để đọc hướng dẫn\n(Hãy gõ `!delete` sau khi chơi xong hoặc không sử dụng phòng chơi nữa)",
   "session_create_error": "Có lỗi khi tạo phòng chơi, vui lòng thử lại.",
   "session_deleted": "Phòng chơi đã được xóa, người chơi khác có thể tạo phòng chơi mới.",
   "session_reset": "Phòng chơi đã được reset, tất cả các người chơi đã tham gia trước đó vui lòng tham gia lại.",
   "session_restart": "Phòng chơi đã đã trở lại trạng thái chờ, người chơi đang đợi có thên tham gia vào lúc này. Gõ `!start` để bắt đầu.",
   "session_expire": "Phòng chơi đã bị xóa do không có tương tác",
+  "session_new_owner": "Chủ phòng <@!{}> đã rời phòng chơi, chủ phòng chơi mới là <@!{}>",
   "player_join_fail": "Có lỗi khi tham gia, vui lòng thử lại.",
   "no_session_to_join": "Không tìm thấy phòng chơi nào để tham gia",
   "game_start": "Game start!",

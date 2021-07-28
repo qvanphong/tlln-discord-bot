@@ -32,13 +32,13 @@ class WordGame:
                 await self.send_message(message, "session_expire")
 
     # Create a game session, assign creator to session object
-    async def create_session(self, message: discord.message):
+    async def create_session(self, message: discord.message, profile):
         if self.session is not None:
             await self.send_message(message, "session_existed")
         else:
-            if message.author is not None and message.author.display_name is not None:
-                self._create_session(message.author)
-                await self.send_message(message, "session_created", message.author.display_name)
+            if profile is not None:
+                self._create_session(profile)
+                await self.send_message(message, "session_created", profile.id)
             else:
                 await self.send_message(message, "session_create_error")
 
@@ -74,19 +74,27 @@ class WordGame:
         else:
             await self.send_message(message, "no_session_to_join")
 
+    # Player quit the game. Delete session if no one else
     async def quit(self, message, player):
         if self.session_created() and player is not None:
             if self.session.remove_player(player.id):
                 await self.send_message(message, "quit", player.name)
 
-    # Kick player out the game
+                if await self.delete_session_if_on_one_left(message):
+                    return
+
+                if self.is_from_creator(message):
+                    self.session.set_new_owner()
+                    await self.send_message(message, "session_new_owner", message.author.id, self.session.creator.id)
+
+    # Kick player out the game. Delete session if no one else
     async def kick(self, message, player):
         if self.session_created() and self.is_from_creator(message) and player is not None:
             if self.session.remove_player(player.id):
                 await self.send_message(message, "kicked", player.name)
-                await self.list_players(message)
-
-                self.update_last_update()
+                if await self.delete_session_if_on_one_left(message) is False:
+                    await self.list_players(message)
+                    self.update_last_update()
         else:
             await self.send_message(message, "kicked_not_found")
 
@@ -182,7 +190,7 @@ class WordGame:
 
     def is_from_creator(self, message):
         return self.session_created() and \
-               (self.session.creator.id == message.author.id or message.author.id == 403040446118363138)
+               (self.session.creator.id == message.author.id)
 
     def is_from_player_on_turn(self, message):
         return self.session_created() and self.session.current_player_turn.id == message.author.id
@@ -193,3 +201,10 @@ class WordGame:
     # Update last update time
     def update_last_update(self):
         self.session.last_updated = time.time()
+
+    async def delete_session_if_on_one_left(self, message):
+        # Delete session if no one left
+        if len(self.session.players) == 0:
+            await self.delete_session(message)
+            return True
+        return False
