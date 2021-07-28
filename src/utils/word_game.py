@@ -23,6 +23,7 @@ class WordGame:
         self.client = client
         f = open(definition.get_path('assets/word_game_responses.json'), encoding="utf8")
         self.responses = json.load(f)
+        f.close()
 
     async def check_expire_session(self, message):
         if self.session_created():
