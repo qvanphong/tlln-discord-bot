@@ -69,45 +69,86 @@ class CaroEngine:
                 return -1
 
     def turn_check(self, x, y, caro: CaroBoard):
-        caro.victory = self.check_horizontal(y, caro.board, caro.streak_to_win) or \
-                       self.check_vertical(x, caro.board, caro.streak_to_win) or\
-                       self.check_diagonal(x, y, caro, caro.streak_to_win)
+        caro.victory = \
+            self.check_horizontal_vertical(x,
+                                           y,
+                                           caro.board,
+                                           caro.streak_to_win,
+                                           caro.block_rule,
+                                           caro.get_current_mark()) or \
+            self.check_diagonal(x,
+                                y,
+                                caro,
+                                caro.streak_to_win,
+                                caro.block_rule,
+                                caro.get_current_mark())
 
-    def check_horizontal(self, y, board, streak_to_win):
-        streak_regex = r"(O{" + re.escape(str(streak_to_win) + "," + str(streak_to_win)) + r"}|X{" + \
-                       re.escape(str(streak_to_win) + "," + str(streak_to_win)) + "})"
-        row = "".join(board[y])
-        if re.search(pattern=streak_regex, string=row) is not None:
+    def check_horizontal_vertical(self, x, y, board, streak_to_win, block_rule, mark):
+        # Check horizontal
+        streak_regex = "{mark}{{{streak},{streak}}}".format(mark=mark, streak=streak_to_win)
+        line = "".join(board[y])
+        win_match = re.search(pattern=streak_regex, string=line)
+        if win_match is not None:
+            if block_rule is True:
+                return self.check_head_block(line, win_match.group(), streak_to_win, mark)
             return True
+        else:
+            # check vertical
+            temp_board = np.array(board).T
+            line = "".join(temp_board[x])
+            win_match = re.search(pattern=streak_regex, string=line)
+            if win_match is not None:
+                if block_rule is True:
+                    return self.check_head_block(line, win_match.group(), streak_to_win, mark)
+                return True
         return False
 
-    def check_vertical(self, x, board, streak_to_win):
-        streak_regex = r"(O{" + re.escape(str(streak_to_win) + "," + str(streak_to_win)) + r"}|X{" + \
-                       re.escape(str(streak_to_win) + "," + str(streak_to_win)) + "})"
-        temp_board = np.array(board).T
-        row = "".join(temp_board[x])
-        if re.search(pattern=streak_regex, string=row) is not None:
-            return True
-        return False
+    # def check_vertical(self, x, board, streak_to_win, has_head_block, mark):
+    #     streak_regex = "{mark}{{{streak},{streak}}}".format(mark=mark, streak=streak_to_win)
+    #     temp_board = np.array(board).T
+    #     line = "".join(temp_board[x])
+    #     win_match = re.search(pattern=streak_regex, string=line)
+    #     if win_match is not None:
+    #         if has_head_block is True:
+    #             return self.check_head_block(line, win_match, mark)
+    #         return True
+    #     return False
 
-    def check_diagonal(self, x, y, caro: CaroBoard, streak_to_win):
-        streak_regex = r"(O{" + re.escape(str(streak_to_win) + "," + str(streak_to_win)) + r"}|X{" + \
-                       re.escape(str(streak_to_win) + "," + str(streak_to_win)) + "})"
+    def check_diagonal(self, x, y, caro: CaroBoard, streak_to_win, block_rule, mark):
+        streak_regex = "{mark}{{{streak},{streak}}}".format(mark=mark, streak=streak_to_win)
         # Check left to right diagonal ( \ )
         ltr_bound = x - y
-        ltr = ""
+        ltr_line = ""
         # Check right to lef diagonal ( / )
         rtl_bound = x + y
-        rtl = ""
+        rtl_line = ""
 
         for row_index in range(0, caro.height):
             if caro.height > ltr_bound + row_index >= 0:
-                ltr += str(caro.board[row_index][ltr_bound + row_index])
+                ltr_line += str(caro.board[row_index][ltr_bound + row_index])
             if caro.height > rtl_bound - row_index >= 0:
-                rtl += str(caro.board[row_index][rtl_bound - row_index])
-        if re.search(streak_regex, ltr) is not None:
+                rtl_line += str(caro.board[row_index][rtl_bound - row_index])
+        if re.search(streak_regex, ltr_line) is not None:
             return True
         else:
-            if re.search(streak_regex, rtl) is not None:
+            win_match = re.search(pattern=streak_regex, string=rtl_line)
+            if win_match is not None:
+                if block_rule is True:
+                    return self.check_head_block(rtl_line, win_match.group(), streak_to_win, mark)
                 return True
             return False
+
+    def check_head_block(self, line, win_match, win_streak, mark):
+        win_index = line.index(win_match)
+        if win_index == 0 or win_index + win_streak - 1 == len(line):
+            return True
+        else:
+            left = line[win_index - 1]
+            right = line[win_index + win_streak]
+            other_mark = CaroBoard.second_player_mark if mark == CaroBoard.first_player_mark else CaroBoard.first_player_mark
+            if left != other_mark and right != other_mark or \
+                    left == other_mark and right != other_mark or \
+                    left != other_mark and right == other_mark:
+                return True
+            else:
+                return False
