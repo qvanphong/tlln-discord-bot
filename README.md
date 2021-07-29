@@ -10,6 +10,7 @@
 - Check coins prices.
 - Convert amount of 2 different coin. (eg: 1 NEO = 5 GAS)
 - Alert coin pump or dump. (Customize your own by edit my binance_price.py)
+- Word cross game, Caro game (gomoku in Vietnamese)
 - Some funny commands...
 
 **Installation**
