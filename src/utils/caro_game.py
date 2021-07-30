@@ -129,7 +129,9 @@ class CaroGame:
 
     async def announce_turn(self, message, caro_game):
         await message.channel.send(file=self.engine.get_board_drawer(caro_game))
-        await self.send_message(message, "player_turn", caro_game.current_player_turn.id)
+        await self.send_message(message, "player_turn",
+                                caro_game.current_player_turn.id,
+                                caro_game.get_current_mark())
 
     async def announce_turn_with_info(self, message, caro_game):
         await message.channel.send(file=self.engine.get_board_drawer(caro_game))
@@ -139,7 +141,9 @@ class CaroGame:
                                 caro_game.height,
                                 caro_game.streak_to_win,
                                 "Không" if caro_game.block_rule is False else "Có")
-        await self.send_message(message, "player_turn", caro_game.current_player_turn.id)
+        await self.send_message(message, "player_turn",
+                                caro_game.current_player_turn.id,
+                                caro_game.get_current_mark())
 
     async def send_message(self, message, key, *args):
         if len(args) == 0:
