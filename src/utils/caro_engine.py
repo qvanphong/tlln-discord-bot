@@ -26,7 +26,7 @@ class CaroEngine:
 
     title_height = 40
     title_font_size = 0.7
-    title_font_thickness = 2
+    title_font_thickness = 1
 
     def get_board_drawer(self, caro: CaroBoard):
         if caro.board_image is None:
