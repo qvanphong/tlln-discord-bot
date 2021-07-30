@@ -18,9 +18,14 @@ class CaroEngine:
     line_thickness = 1
     square_side_length = 30
 
-    label_font = cv2.FONT_HERSHEY_SIMPLEX
+    font = cv2.FONT_HERSHEY_SIMPLEX
+
     label_font_size = 0.5
     label_font_thickness = 1
+
+    title_height = 40
+    title_font_size = 0.7
+    title_font_thickness = 2
 
     def get_board_drawer(self, caro: CaroBoard):
         if caro.board_image is None:
@@ -32,16 +37,51 @@ class CaroEngine:
 
     def draw_new_board(self, caro: CaroBoard):
         # compute image width height
-        image_width = self.margin * 2 + self.label_width + self.line_thickness \
+        image_width = self.margin * 2 \
+            + self.label_width + self.line_thickness \
             + caro.width * (self.square_side_length + self.line_thickness)
-        image_height = self.margin * 2 + self.label_width + self.line_thickness \
+        image_height = self.margin * 2 + self.title_height \
+            + self.label_width + self.line_thickness \
             + caro.height * (self.square_side_length + self.line_thickness)
 
         # declare white image
-        image = np.full([image_width, image_height, 3], 255, np.uint8)
+        image = np.full([image_height, image_width, 3], 255, np.uint8)
+
+        # draw title
+        xcenter = image_width // 2
+        ycenter = self.margin + self.title_height // 2
+        cv2.line(image, (xcenter - 5, ycenter), (xcenter + 5, ycenter),
+                 BLACK, 3, cv2.LINE_AA)
+        player1_size, _ = cv2.getTextSize(
+            caro.first_player.name, self.font,
+            self.title_font_size, self.title_font_thickness)
+        xp1 = xcenter - 10 - player1_size[0]
+        yp1 = self.margin + self.title_height \
+            - (self.title_height - player1_size[1]) // 2
+        cv2.putText(image, caro.first_player.name, (xp1, yp1),
+                    self.font, self.title_font_size, BLACK,
+                    self.title_font_thickness, cv2.LINE_AA)
+        player2_size, _ = cv2.getTextSize(
+            caro.second_player.name, self.font,
+            self.title_font_size, self.title_font_thickness)
+        xp2 = xcenter + 10
+        yp2 = self.margin + self.title_height \
+            - (self.title_height - player2_size[1]) // 2
+        cv2.putText(image, caro.second_player.name, (xp2, yp2),
+                    self.font, self.title_font_size, BLACK,
+                    self.title_font_thickness, cv2.LINE_AA)
+
+        # draw player marks
+        cv2.circle(image, (xp1 - 15, ycenter), 8, BLUE, 3, cv2.LINE_AA)
+        x_size, _ = cv2.getTextSize("x", self.font, 1.3, 3)
+        xleft = xp2 + player2_size[0] + 3
+        ybottom = ycenter + x_size[1] // 2 - 5
+        cv2.putText(image, "x", (xleft, ybottom),
+                    self.font, 1.3, RED, 3, cv2.LINE_AA)
 
         # draw rows/columns
-        x1 = y1 = self.margin + self.line_thickness // 2
+        x1 = self.margin + self.line_thickness // 2
+        y1 = x1 + self.title_height
         x2 = image_width - self.margin - self.label_width \
             - self.line_thickness // 2 - 1
         y2 = image_height - self.margin - self.label_width \
@@ -52,7 +92,7 @@ class CaroEngine:
             cv2.line(image, (x, y1), (x, y2),
                      BLACK, self.line_thickness, cv2.LINE_AA)
         for i in range(caro.height + 1):
-            y = self.margin + self.line_thickness // 2 \
+            y = self.margin + self.title_height + self.line_thickness // 2 \
                 + i * (self.square_side_length + self.line_thickness)
             cv2.line(image, (x1, y), (x2, y),
                      BLACK, self.line_thickness, cv2.LINE_AA)
@@ -60,24 +100,25 @@ class CaroEngine:
         # draw labels
         for i in range(caro.width):
             text_size, _ = cv2.getTextSize(
-                f"{i + 1}", self.label_font,
+                f"{i + 1}", self.font,
                 self.label_font_size, self.label_font_thickness)
             x = self.margin + self.line_thickness \
                 + (self.square_side_length - text_size[0]) // 2 \
                 + i * (self.square_side_length + self.line_thickness)
             y = image_height - self.margin - self.label_width + 8 + text_size[1]
             cv2.putText(image, f"{i + 1}", (x, y),
-                        self.label_font, self.label_font_size, BLACK,
+                        self.font, self.label_font_size, BLACK,
                         self.label_font_thickness, cv2.LINE_AA)
         x = image_width - self.margin - self.label_width + 8
         for i in range(caro.height):
             text_size, _ = cv2.getTextSize(
-                chr(ord("A") + i), self.label_font,
+                chr(ord("A") + i), self.font,
                 self.label_font_size, self.label_font_thickness)
-            y = self.margin - (self.square_side_length - text_size[1]) // 2 \
+            y = self.margin + self.title_height \
+                - (self.square_side_length - text_size[1]) // 2 \
                 + (i + 1) * (self.square_side_length + self.line_thickness)
             cv2.putText(image, chr(ord("A") + i), (x, y),
-                        self.label_font, self.label_font_size, BLACK,
+                        self.font, self.label_font_size, BLACK,
                         self.label_font_thickness, cv2.LINE_AA)
 
         return image
@@ -89,20 +130,20 @@ class CaroEngine:
             xcenter = self.margin + self.line_thickness \
                 + self.square_side_length // 2 \
                 + x * (self.square_side_length + self.line_thickness)
-            ycenter = self.margin + self.line_thickness \
+            ycenter = self.margin + self.title_height + self.line_thickness \
                 + self.square_side_length // 2 \
                 + y * (self.square_side_length + self.line_thickness)
             cv2.circle(image, (xcenter, ycenter), 8, BLUE, 3, cv2.LINE_AA)
         else:
-            x_size, _ = cv2.getTextSize("x", self.label_font, 1.3, 3)
+            x_size, _ = cv2.getTextSize("x", self.font, 1.3, 3)
             xleft = self.margin + self.line_thickness \
                 + (self.square_side_length - x_size[0]) // 2 + 1 \
                 + x * (self.square_side_length + self.line_thickness)
-            ybottom = self.margin \
+            ybottom = self.margin + self.title_height \
                 - (self.square_side_length - x_size[1]) // 2 - 6 \
                 + (y + 1) * (self.square_side_length + self.line_thickness)
             cv2.putText(image, "x", (xleft, ybottom),
-                        self.label_font, 1.3, RED, 3, cv2.LINE_AA)
+                        self.font, 1.3, RED, 3, cv2.LINE_AA)
 
         return image
 
