@@ -23,7 +23,7 @@ class CaroGame:
         self.client = client
 
     async def create_and_start(self, message, player1, player2, width, height, point_to_win, block_rule):
-        if width - 1 < point_to_win or height - 1 < point_to_win:
+        if width < point_to_win or height < point_to_win or point_to_win <= 1:
             await self.send_message(message, "win_point_lower")
         elif 1 > width > 26 or 1 > height > 26:
             await self.send_message(message, "out_of_range")
