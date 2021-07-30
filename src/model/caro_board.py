@@ -10,8 +10,8 @@ class CaroBoard:
     creator = None
     first_player = None
     second_player = None
-    first_player_mark = "0"
-    second_player_mark = "×"
+    first_player_mark = "O"
+    second_player_mark = "X"
     blank_character = '_'
     turns = None
     current_player_turn = None
