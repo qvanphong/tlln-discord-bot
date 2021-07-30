@@ -81,7 +81,9 @@ class CaroClient(discord.Client):
                 elif message.author.id == 437090685309681705 or message.author.id == 403040446118363138 and \
                         len(message.mentions) == 2 and \
                         re.search(self.caro_set_win_regex, message_content, re.IGNORECASE):
-                    await self.caro.admin_set_score(message, message.mentions[0], message.mentions[1])
+                    player1 = await self.fetch_user_profile(message.author.id)
+                    player2 = await self.fetch_user_profile(message.mentions[0].id)
+                    await self.caro.admin_set_score(message, player1, player2)
 
 
 caro = CaroClient().run(env.TOKEN)

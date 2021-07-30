@@ -163,5 +163,5 @@ class CaroGame:
         await message.channel.send(">>> ```CSS\n{}```".format(leader_board))
 
     async def save_score(self, winner, loser):
-        caro_repository.save_score(winner.user, "win")
-        caro_repository.save_score(loser.user, "lose")
+        caro_repository.save_score(winner, "win")
+        caro_repository.save_score(loser, "lose")
