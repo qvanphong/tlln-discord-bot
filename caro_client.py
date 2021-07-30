@@ -68,8 +68,10 @@ class CaroClient(discord.Client):
                     x = int(raw_move[1:len(raw_move)]) - 1
 
                     await self.caro.move(message, message.author, x, y)
-                # Set win
+
+                # Set win, this command only use for admin
                 elif message.author.id == 437090685309681705 or message.author.id == 403040446118363138 and \
+                        len(message.mentions) == 2 and \
                         re.search(self.caro_set_win_regex, message_content, re.IGNORECASE):
                     await self.caro.admin_set_score(message, message.mentions[0], message.mentions[1])
 
