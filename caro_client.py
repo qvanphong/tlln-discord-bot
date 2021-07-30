@@ -68,7 +68,7 @@ class CaroClient(discord.Client):
                     player1 = await self.fetch_user_profile(message.author.id)
                     player2 = await self.fetch_user_profile(message.mentions[0].id)
 
-                    await self.caro.create_and_start(message, player1.user, player2.user, 7, 7, 3, True)
+                    await self.caro.create_and_start(message, player1.user, player2.user, 15, 15, 5, True)
                 # Move
                 elif re.search(self.caro_move_regex, message_content, re.IGNORECASE):
                     raw_move = message_content.split()[1]
