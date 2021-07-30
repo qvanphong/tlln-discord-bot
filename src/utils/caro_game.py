@@ -64,7 +64,7 @@ class CaroGame:
         if player_game is not None:
             await self.send_message(message, "surrender",
                                     player.id,
-                                    player_game.first_player.id if player_game.second_player.id == player else player_game.second_player.id
+                                    player_game.first_player.id if player_game.second_player == player else player_game.second_player.id
                                     )
             await self.save_score(
                 player_game.first_player if player_game.first_player != player_game.current_player_turn else player_game.second_player,
