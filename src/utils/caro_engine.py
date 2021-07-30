@@ -8,6 +8,7 @@ import discord
 
 WHITE = (255, 255, 255)
 BLACK = (0, 0, 0)
+GREY = (200, 200, 200)
 BLUE = (255, 0, 0)
 RED = (0, 0, 255)
 
@@ -121,10 +122,33 @@ class CaroEngine:
                         self.font, self.label_font_size, BLACK,
                         self.label_font_thickness, cv2.LINE_AA)
 
+        # draw sub labels
+        for i in range(caro.width):
+            for j in range(caro.height):
+                label = f"{chr(ord('A') + j)}{i + 1}"
+                label_size, _ = cv2.getTextSize(label, self.font, 0.4, 1)
+                x = self.margin + self.line_thickness \
+                    + (self.square_side_length - label_size[0]) // 2 \
+                    + i * (self.square_side_length + self.line_thickness)
+                y = self.margin + self.title_height \
+                    - (self.square_side_length - label_size[1]) // 2 \
+                    + (j + 1) * (self.square_side_length + self.line_thickness)
+                cv2.putText(image, label, (x, y), self.font,
+                            0.4, GREY, 1, cv2.LINE_AA)
+
         return image
 
     def draw_new_turn(self, x, y, caro: CaroBoard):
         image = caro.board_image
+
+        x1 = self.margin + self.line_thickness + 3 \
+            + x * (self.square_side_length + self.line_thickness)
+        y1 = self.margin + self.title_height + self.line_thickness + 3 \
+            + y * (self.square_side_length + self.line_thickness)
+        x2 = x1 + self.square_side_length - 5
+        y2 = y1 + self.square_side_length - 5
+        cv2.rectangle(image, (x1, y1), (x2, y2),
+                      WHITE, cv2.FILLED, cv2.LINE_AA)
 
         if caro.is_first_player():
             xcenter = self.margin + self.line_thickness \
