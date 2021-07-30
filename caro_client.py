@@ -22,19 +22,19 @@ class CaroClient(discord.Client):
             message_content = message.content.lower()
 
             if "!caro gg" == message_content:
-                await self.caro.surrender(message, message.author.id)
+                await self.caro.surrender(message, message.author)
 
             elif "!caro stop" == message_content:
-                await self.caro.stop(message, message.author.id)
+                await self.caro.stop(message, message.author)
 
             elif "!caro board" == message_content:
-                await self.caro.print_board(message, message.author.id)
+                await self.caro.print_board(message, message.author)
 
             elif "!caro huongdan" == message_content:
                 await self.caro.send_message(message, "tutorial")
 
             elif "!caro rematch" == message_content:
-                await self.caro.rematch(message, message.author.id)
+                await self.caro.rematch(message, message.author)
 
             elif "!caro leaderboard" == message_content:
                 await self.caro.leader_board(message)
@@ -53,25 +53,25 @@ class CaroClient(discord.Client):
                     else:
                         block_rule = False
                     await self.caro.create_and_start(message,
-                                                     message.author.id,
-                                                     message.mentions[0].id,
+                                                     message.author,
+                                                     message.mentions[0],
                                                      width,
                                                      height,
                                                      win_point,
                                                      block_rule)
                 elif re.search(self.caro_default_regex, message_content, re.IGNORECASE):
-                    await self.caro.create_and_start(message, message.author.id, message.mentions[0].id, 7, 7, 3, True)
+                    await self.caro.create_and_start(message, message.author, message.mentions[0], 7, 7, 3, True)
                 # Move
                 elif re.search(self.caro_move_regex, message_content, re.IGNORECASE):
                     raw_move = message_content.split()[1]
                     y = ord(raw_move[0]) - 97
                     x = int(raw_move[1:len(raw_move)]) - 1
 
-                    await self.caro.move(message, message.author.id, x, y)
+                    await self.caro.move(message, message.author, x, y)
                 # Set win
                 elif message.author.id == 437090685309681705 or message.author.id == 403040446118363138 and \
                         re.search(self.caro_set_win_regex, message_content, re.IGNORECASE):
-                    await self.caro.admin_set_score(message, message.mentions[0].id, message.mentions[1].id)
+                    await self.caro.admin_set_score(message, message.mentions[0], message.mentions[1])
 
 
 caro = CaroClient().run(env.TOKEN)
