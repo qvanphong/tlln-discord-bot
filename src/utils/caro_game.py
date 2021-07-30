@@ -128,11 +128,11 @@ class CaroGame:
         return None
 
     async def announce_turn(self, message, caro_game):
-        await message.channel.send("```CSS\n{}```".format(self.engine.get_board_drawer(caro_game)))
+        await message.channel.send(file=self.engine.get_board_drawer(caro_game))
         await self.send_message(message, "player_turn", caro_game.current_player_turn)
 
     async def announce_turn_with_info(self, message, caro_game):
-        await message.channel.send("```CSS\n{}```".format(self.engine.get_board_drawer(caro_game)))
+        await message.channel.send(file=self.engine.get_board_drawer(caro_game))
         await self.send_message(message, "board_info",
                                 caro_game.match_id,
                                 caro_game.width,

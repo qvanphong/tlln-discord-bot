@@ -18,6 +18,7 @@ class CaroBoard:
     board = None
     victory = None
     block_rule = None
+    board_image = None
 
     def __init__(self, player_1, player_2, width, height, point_to_win, block_rule):
         self.match_id = generate()
@@ -33,6 +34,7 @@ class CaroBoard:
         self.board = np.full((height, width), self.blank_character)
         self.block_rule = block_rule
         self.turns = 0
+        self.board_image = None
 
     def is_first_player(self):
         if self.current_player_turn == self.first_player:

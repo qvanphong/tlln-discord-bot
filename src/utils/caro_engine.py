@@ -1,54 +1,103 @@
 from src.model.caro_board import CaroBoard
 import re
 import numpy as np
+import io
+import cv2
+import discord
+
+
+WHITE = (255, 255, 255)
+BLACK = (0, 0, 0)
+BLUE = (255, 0, 0)
+RED = (0, 0, 255)
 
 
 class CaroEngine:
-    corner_left_top = "╔"
-    corner_right_top = "╗"
-    corner_left_bot = "╚"
-    corner_right_bot = "╝"
-    corner_straight = "═"
-    corner_up = "╩"
-    corner_down = "╦"
-    corner_left = "╠"
-    corner_middle = "╬"
-    corner_right = "╣"
-    box_width = 3
+    margin = 10
+    label_width = 20
+    line_thickness = 3
+    square_side_length = 30
+
+    label_font = cv2.FONT_HERSHEY_SIMPLEX
+    lebel_font_size = 0.5
+    label_font_thickness = 2
 
     def get_board_drawer(self, caro: CaroBoard):
-        column_print = ""
-        for y in range(0, caro.height * 2 + 1):
-            for x in range(0, caro.width):
-                if y == 0:
-                    column_print += " {} ".format(" " + str(x + 1) if x < 10 else x + 1)
-                elif y == 1:
-                    column_print += "{}{}{}".format(
-                        self.corner_left_top if x == 0 else self.corner_down if x != caro.width else self.corner_right_top,
-                        self.corner_straight * self.box_width,
-                        self.corner_right_top if x == caro.width - 1 else "")
-                elif y % 2 == 0:
-                    column_print += "║ {} {}".format(
-                        " " if caro.board[int((y - 1) / 2)][x] == caro.blank_character else
-                        caro.board[int((y - 1) / 2)][x],
-                        # Current y must /2 (since I multiply 2 on above range()) and + 65 as 'A' character
-                        "║ {}".format(chr(int((y - 1) / 2 + 65))) if x == caro.width - 1 else ""
-                    )
-                else:
-                    column_print += "{}{}{}".format(
-                        self.corner_left if x == 0 else self.corner_middle if x != caro.width else self.corner_right,
-                        self.corner_straight * self.box_width,
-                        self.corner_right if x == caro.width - 1 else "")
+        if caro.board_image is None:
+            caro.board_image = self.draw_new_board(caro)
 
-            column_print += "\n"
-            if y == caro.height * 2:
-                for x in range(0, caro.width):
-                    column_print += "{}{}{}".format(
-                        self.corner_left_bot if x == 0 else self.corner_up if x != caro.width else self.corner_right_bot,
-                        self.corner_straight * self.box_width,
-                        self.corner_right_bot if x == caro.width - 1 else "")
+        _, buffer = cv2.imencode(".jpg", caro.board_image)
+        io_buf = io.BytesIO(buffer)
+        return discord.File(io_buf, "board.jpg")
 
-        return column_print
+    def draw_new_board(self, caro: CaroBoard):
+        # compute image width height
+        image_width = self.margin * 2 + self.label_width + self.line_thickness \
+            + caro.width * (self.square_side_length + self.line_thickness)
+        image_height = self.margin * 2 + self.label_width + self.line_thickness \
+            + caro.height * (self.square_side_length + self.line_thickness)
+
+        # declare white image
+        image = np.full([image_width, image_height, 3], 255, np.uint8)
+
+        # draw rows/columns
+        x1 = y1 = self.margin + self.line_thickness // 2
+        x2 = image_width - self.margin - self.label_width \
+            - self.line_thickness // 2 - 1
+        y2 = image_height - self.margin - self.label_width \
+            - self.line_thickness // 2 - 1
+        for i in range(caro.width + 1):
+            x = self.margin + self.line_thickness // 2 \
+                + i * (self.square_side_length + self.line_thickness)
+            cv2.line(image, (x, y1), (x, y2),
+                     BLACK, self.line_thickness, cv2.LINE_AA)
+        for i in range(caro.height + 1):
+            y = self.margin + self.line_thickness // 2 \
+                + i * (self.square_side_length + self.line_thickness)
+            cv2.line(image, (x1, y), (x2, y),
+                     BLACK, self.line_thickness, cv2.LINE_AA)
+
+        # draw labels
+        y = image_height - self.margin
+        for i in range(caro.width):
+            shift = 6 if i < 9 else 12
+            x = self.margin + self.line_thickness \
+                + self.square_side_length // 2 - shift \
+                + i * (self.square_side_length + self.line_thickness)
+            cv2.putText(image, f"{i + 1}", (x, y),
+                        self.label_font, self.lebel_font_size, BLACK,
+                        self.label_font_thickness, cv2.LINE_AA)
+        x = image_width - self.margin - self.label_width + 10
+        for i in range(caro.height):
+            y = self.margin + self.line_thickness \
+                + self.square_side_length // 2 + 5 \
+                + i * (self.square_side_length + self.line_thickness)
+            cv2.putText(image, chr(ord("A") + i), (x, y),
+                        self.label_font, self.lebel_font_size, BLACK,
+                        self.label_font_thickness, cv2.LINE_AA)
+
+        return image
+
+    def draw_new_turn(self, x, y, caro: CaroBoard):
+        image = caro.board_image
+
+        if caro.is_first_player():
+            xcenter = self.margin + self.line_thickness \
+                + self.square_side_length // 2 \
+                + x * (self.square_side_length + self.line_thickness)
+            ycenter = self.margin + self.line_thickness \
+                + self.square_side_length // 2 \
+                + y * (self.square_side_length + self.line_thickness)
+            cv2.circle(image, (xcenter, ycenter), 8, BLUE, 3, cv2.LINE_AA)
+        else:
+            xleft = self.margin + self.line_thickness + 4 \
+                + x * (self.square_side_length + self.line_thickness)
+            ybottom = self.margin - 6 \
+                + (y + 1) * (self.square_side_length + self.line_thickness)
+            cv2.putText(image, "x", (xleft, ybottom),
+                        self.label_font, 1.3, RED, 3, cv2.LINE_AA)
+
+        return image
 
     # This will return int number, we treat it as status
     # 1: current player won
@@ -58,6 +107,7 @@ class CaroEngine:
         if caro.width > x >= 0 and caro.height > y >= 0:
             if caro.board[y][x] == caro.blank_character:
                 caro.insert_to_board(x, y)
+                caro.board_image = self.draw_new_turn(x, y, caro)
                 self.turn_check(x, y, caro)
 
                 if caro.victory is True:
