@@ -15,12 +15,12 @@ RED = (0, 0, 255)
 class CaroEngine:
     margin = 10
     label_width = 20
-    line_thickness = 3
+    line_thickness = 1
     square_side_length = 30
 
     label_font = cv2.FONT_HERSHEY_SIMPLEX
-    lebel_font_size = 0.5
-    label_font_thickness = 2
+    label_font_size = 0.5
+    label_font_thickness = 1
 
     def get_board_drawer(self, caro: CaroBoard):
         if caro.board_image is None:
@@ -65,7 +65,7 @@ class CaroEngine:
                 + self.square_side_length // 2 - shift \
                 + i * (self.square_side_length + self.line_thickness)
             cv2.putText(image, f"{i + 1}", (x, y),
-                        self.label_font, self.lebel_font_size, BLACK,
+                        self.label_font, self.label_font_size, BLACK,
                         self.label_font_thickness, cv2.LINE_AA)
         x = image_width - self.margin - self.label_width + 10
         for i in range(caro.height):
@@ -73,7 +73,7 @@ class CaroEngine:
                 + self.square_side_length // 2 + 5 \
                 + i * (self.square_side_length + self.line_thickness)
             cv2.putText(image, chr(ord("A") + i), (x, y),
-                        self.label_font, self.lebel_font_size, BLACK,
+                        self.label_font, self.label_font_size, BLACK,
                         self.label_font_thickness, cv2.LINE_AA)
 
         return image
