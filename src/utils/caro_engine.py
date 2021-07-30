@@ -24,8 +24,8 @@ class CaroEngine:
     label_font_size = 0.5
     label_font_thickness = 1
 
-    title_height = 40
-    title_font_size = 0.7
+    title_height = 32
+    title_font_size = 0.5
     title_font_thickness = 1
 
     def get_board_drawer(self, caro: CaroBoard):
@@ -52,7 +52,7 @@ class CaroEngine:
         xcenter = image_width // 2
         ycenter = self.margin + self.title_height // 2
         cv2.line(image, (xcenter - 5, ycenter), (xcenter + 5, ycenter),
-                 BLACK, 3, cv2.LINE_AA)
+                 BLACK, 1, cv2.LINE_AA)
         player1_size, _ = cv2.getTextSize(
             caro.first_player.name, self.font,
             self.title_font_size, self.title_font_thickness)
@@ -73,12 +73,12 @@ class CaroEngine:
                     self.title_font_thickness, cv2.LINE_AA)
 
         # draw player marks
-        cv2.circle(image, (xp1 - 15, ycenter), 8, BLUE, 3, cv2.LINE_AA)
+        cv2.circle(image, (xp1 - 15, ycenter), 6, BLUE, 1, cv2.LINE_AA)
         x_size, _ = cv2.getTextSize("x", self.font, 1.3, 3)
         xleft = xp2 + player2_size[0] + 3
-        ybottom = ycenter + x_size[1] // 2 - 5
+        ybottom = ycenter + x_size[1] // 2 - 7
         cv2.putText(image, "x", (xleft, ybottom),
-                    self.font, 1.3, RED, 3, cv2.LINE_AA)
+                    self.font, 0.8, RED, 1, cv2.LINE_AA)
 
         # draw rows/columns
         x1 = self.margin + self.line_thickness // 2
