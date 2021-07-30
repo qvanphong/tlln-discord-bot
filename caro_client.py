@@ -48,19 +48,27 @@ class CaroClient(discord.Client):
                     height = int(split[3])
                     win_point = int(split[4])
 
+                    # Must fetch player profile rather than use directly from message.author or message.mentions
+                    # Because sometime, their display_name and name will be None
+                    player1 = await self.fetch_user_profile(message.author.id)
+                    player2 = await self.fetch_user_profile(message.mentions[0].id)
+
                     if len(split) == 6 and split[5].strip() == "yes":
                         block_rule = True
                     else:
                         block_rule = False
                     await self.caro.create_and_start(message,
-                                                     message.author,
-                                                     message.mentions[0],
+                                                     player1.user,
+                                                     player2.user,
                                                      width,
                                                      height,
                                                      win_point,
                                                      block_rule)
                 elif re.search(self.caro_default_regex, message_content, re.IGNORECASE):
-                    await self.caro.create_and_start(message, message.author, message.mentions[0], 7, 7, 3, True)
+                    player1 = await self.fetch_user_profile(message.author.id)
+                    player2 = await self.fetch_user_profile(message.mentions[0].id)
+
+                    await self.caro.create_and_start(message, player1.user, player2.user, 7, 7, 3, True)
                 # Move
                 elif re.search(self.caro_move_regex, message_content, re.IGNORECASE):
                     raw_move = message_content.split()[1]
