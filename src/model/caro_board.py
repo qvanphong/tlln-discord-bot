@@ -1,6 +1,7 @@
 import numpy as np
 from nanoid import generate
 
+
 class CaroBoard:
     match_id = None
     width = 7
