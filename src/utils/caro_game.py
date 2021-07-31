@@ -62,21 +62,25 @@ class CaroGame:
     async def surrender(self, message, player):
         player_game = self.get_game(player)
         if player_game is not None:
-            await self.send_message(message, "surrender",
-                                    player.id,
-                                    player_game.first_player.id if player_game.second_player == player else player_game.second_player.id
-                                    )
-            await self.save_score(
-                player_game.first_player if player_game.first_player != player_game.current_player_turn else player_game.second_player,
-                player_game.current_player_turn)
+            if player_game.current_player_turn == player:
+                await self.send_message(message, "surrender",
+                                        player.id,
+                                        player_game.first_player.id if player_game.second_player == player else player_game.second_player.id
+                                        )
+                await self.save_score(
+                    player_game.first_player if player_game.first_player != player_game.current_player_turn else player_game.second_player,
+                    player_game.current_player_turn)
 
-            self.games.remove(player_game)
+                self.games.remove(player_game)
+            else:
+                await self.send_message(message, "not_your_turn", player.id)
 
     async def move(self, message, player, x, y):
         player_game = self.get_game(player)
         if player_game is not None and player == player_game.current_player_turn:
             status = self.engine.make_turn(x, y, player_game)
             if status == 1:
+                await self.send_board(message, player_game)
                 await self.send_message(message, "win", player_game.current_player_turn.id)
                 await self.save_score(player_game.current_player_turn,
                                       player_game.first_player if player_game.first_player != player_game.current_player_turn else player_game.second_player)
@@ -127,14 +131,17 @@ class CaroGame:
                 return game
         return None
 
-    async def announce_turn(self, message, caro_game):
+    async def send_board(self, message, caro_game):
         await message.channel.send(file=self.engine.get_board_drawer(caro_game))
+
+    async def announce_turn(self, message, caro_game):
+        await self.send_board(message, caro_game)
         await self.send_message(message, "player_turn",
                                 caro_game.current_player_turn.id,
                                 caro_game.get_current_mark())
 
     async def announce_turn_with_info(self, message, caro_game):
-        await message.channel.send(file=self.engine.get_board_drawer(caro_game))
+        await self.send_board(message, caro_game)
         await self.send_message(message, "board_info",
                                 caro_game.match_id,
                                 caro_game.width,

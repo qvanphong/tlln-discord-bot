@@ -1,4 +1,5 @@
 from tinydb import TinyDB, Query
+from functools import cmp_to_key
 import definition
 
 db = TinyDB(definition.get_path('db/caro_leaderboard.json'))
@@ -20,9 +21,20 @@ def save_score(player, win_or_lose):
 
 
 def get_all_score():
-    def win(e):
-        return e["win"]
+    def comparator(e1, e2):
+        if e1["win"] > e2["win"]:
+            return 1
+        elif e1["win"] < e2["win"]:
+            return -1
+        else:
+            if e1["win"] == e2["win"]:
+                if e1["lose"] > e2["lose"]:
+                    return -1
+                elif e1["lose"] < e2["lose"]:
+                    return 1
+                else:
+                    return 0
 
-    result = db.all()[0:10]
-    result.sort(reverse=True, key=win)
-    return result
+    result = db.all()
+    return sorted(result, key=cmp_to_key(comparator), reverse=True)[0:11]
+
