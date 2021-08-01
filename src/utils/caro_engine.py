@@ -212,6 +212,7 @@ class CaroEngine:
         # Check horizontal
         streak_regex = "{mark}{{{streak},{streak}}}".format(mark=mark, streak=streak_to_win)
         line = "".join(board[y])
+
         win_match = re.search(pattern=streak_regex, string=line)
         if win_match is not None:
             if block_rule is True:
@@ -221,23 +222,13 @@ class CaroEngine:
             # check vertical
             temp_board = np.array(board).T
             line = "".join(temp_board[x])
+
             win_match = re.search(pattern=streak_regex, string=line)
             if win_match is not None:
                 if block_rule is True:
                     return self.check_head_block(line, win_match.group(), streak_to_win, mark)
                 return True
         return False
-
-    # def check_vertical(self, x, board, streak_to_win, has_head_block, mark):
-    #     streak_regex = "{mark}{{{streak},{streak}}}".format(mark=mark, streak=streak_to_win)
-    #     temp_board = np.array(board).T
-    #     line = "".join(temp_board[x])
-    #     win_match = re.search(pattern=streak_regex, string=line)
-    #     if win_match is not None:
-    #         if has_head_block is True:
-    #             return self.check_head_block(line, win_match, mark)
-    #         return True
-    #     return False
 
     def check_diagonal(self, x, y, caro: CaroBoard, streak_to_win, block_rule, mark):
         streak_regex = "{mark}{{{streak},{streak}}}".format(mark=mark, streak=streak_to_win)
@@ -253,15 +244,13 @@ class CaroEngine:
                 ltr_line += str(caro.board[row_index][ltr_bound + row_index])
             if caro.height > rtl_bound - row_index >= 0:
                 rtl_line += str(caro.board[row_index][rtl_bound - row_index])
-        if re.search(streak_regex, ltr_line) is not None:
+
+        win_match = re.search(pattern=streak_regex, string=rtl_line)
+        if win_match is not None:
+            if block_rule is True:
+                return self.check_head_block(rtl_line, win_match.group(), streak_to_win, mark)
             return True
-        else:
-            win_match = re.search(pattern=streak_regex, string=rtl_line)
-            if win_match is not None:
-                if block_rule is True:
-                    return self.check_head_block(rtl_line, win_match.group(), streak_to_win, mark)
-                return True
-            return False
+        return False
 
     def check_head_block(self, line, win_match, win_streak, mark):
         win_index = line.index(win_match)
