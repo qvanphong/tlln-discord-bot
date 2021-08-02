@@ -2,6 +2,7 @@ import discord
 from src.utils import env, word_game
 import re
 
+
 class WordGameClient(discord.Client):
     word_game = None
     response_regex = r"^!r [ÀÁÂÃÈÉÊÌÍÒÓÔÕÙÚĂĐĨŨƠàáâãèéêìíòóôõùúăđĩũơƯĂẠẢẤẦẨẪẬẮẰẲẴẶẸẺẼỀỀỂưăạảấầẩẫậắằẳẵặẹẻẽềềểỄỆỈỊỌỎỐỒỔỖỘỚỜỞỠỢỤỦỨỪễệỉịọỏốồổỗộớờởỡợụủứừỬỮỰỲỴÝỶỸửữựỳỵỷỹA-Za-z ]*$"
@@ -79,10 +80,6 @@ class WordGameClient(discord.Client):
                 if len(message.mentions) > 0:
                     profile = await self.fetch_user_profile(message.mentions[0].id)
                     await self.word_game.turn(message, profile.user)
-
-            else:
-                # Check expire session
-                await self.word_game.check_expire_session(message)
 
 
 # Run the game

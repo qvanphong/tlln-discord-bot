@@ -1,3 +1,4 @@
+import asyncio
 import discord.client
 import json
 from src.model.session import Session
@@ -17,7 +18,7 @@ class WordGame:
     client = None
 
     # Session expire time
-    expire_time = 300
+    expire_time = 5
 
     def __init__(self, client: discord.Client):
         self.client = client
@@ -25,21 +26,16 @@ class WordGame:
         self.responses = json.load(f)
         f.close()
 
-    async def check_expire_session(self, message):
-        if self.session_created():
-            current_time = time.time()
-            if current_time - self.session.last_updated >= self.expire_time:
-                self.session = None
-                await self.send_message(message, "session_expire")
-
     # Create a game session, assign creator to session object
     async def create_session(self, message: discord.message, profile):
         if self.session is not None:
             await self.send_message(message, "session_existed")
         else:
             if profile is not None:
-                self._create_session(profile)
+                self._create_session(profile, message)
                 await self.send_message(message, "session_created", profile.id)
+
+                self.client.loop.create_task(self.kill_inactive_game())
             else:
                 await self.send_message(message, "session_create_error")
 
@@ -52,7 +48,7 @@ class WordGame:
     # Reset the game session, which mean all value in variables will be back to default
     async def reset_session(self, message: discord.message):
         if self.is_from_creator(message):
-            self._create_session(message.author)
+            self._create_session(message.author, message)
             await self.send_message(message, "session_reset")
 
     # Rematch, everybody in the game still in the game, just restart the game session
@@ -173,8 +169,8 @@ class WordGame:
         self.update_last_update()
 
     # Create game session
-    def _create_session(self, creator):
-        self.session = Session(creator, time.time())
+    def _create_session(self, creator, message):
+        self.session = Session(creator, message, time.time())
 
     # Send a message with specific message_type
     # check word_game_response.json, the key is message_type
@@ -209,3 +205,14 @@ class WordGame:
             await self.delete_session(message)
             return True
         return False
+
+    async def kill_inactive_game(self):
+        while True:
+            await asyncio.sleep(self.expire_time)
+            if self.session is not None and self.session_created():
+                current_time = time.time()
+                if current_time - self.session.last_updated >= self.expire_time:
+                    await self.send_message(self.session.message, "session_expire")
+
+                    self.session = None
+                    break

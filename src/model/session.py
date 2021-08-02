@@ -6,8 +6,9 @@ class Session:
     previous_answer = ""
     is_started = False
     last_updated = None
+    message = None
 
-    def __init__(self, creator, create_time):
+    def __init__(self, creator, message, create_time):
         self.creator = creator
         self.players = []
         self.players_id = []
@@ -15,6 +16,7 @@ class Session:
         self.previous_answer = ""
         self.is_started = False
         self.last_updated = create_time
+        self.message = message
         self.add_player(creator)
 
     def add_player(self, player):
