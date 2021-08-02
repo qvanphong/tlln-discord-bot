@@ -22,6 +22,14 @@ class AdvancedRandom:
                     random_model.exclude.append(random_number)
                     return [random_number, random_model.exclude]
 
+    def sort_exclude_random_numbers(self, author):
+        index = self.get_author_index(author)
+        if index != -1:
+            random_model = self.random_sessions[index]
+            excludes = random_model.exclude
+            excludes.sort()
+            return excludes
+
     def get_author_index(self, author):
         for index, random_model in enumerate(self.random_sessions):
             if random_model.owner.id == author.id:

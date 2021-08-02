@@ -174,42 +174,6 @@ class DiscordCommandClient(discord.Client):
                             await self.responder.send_sleep_time(message, "!wake" in message.content)
                             return
 
-                    # Random number command
-                    elif "!random" in message.content.lower() and responder.is_regex_match(message.content.lower(),
-                                                                                           self.responder.random_regex):
-
-                        # profile = await self.fetch_user_profile(message.author.id)
-                        profile = message.author
-                        split_command = message.content.lower().split()
-                        minimum = split_command[1]
-                        maximum = split_command[2]
-
-                        if minimum > maximum:
-                            await message.channel.send(">>> Số đầu tiên phải bé hơn số phía sau")
-                            return
-
-                        if len(split_command) == 4 and split_command[3] == "exclude":
-                            self.randomizer.add_random_session(minimum=minimum, maximum=maximum,
-                                                               channel_id=message.channel.id, author=profile)
-                            await message.channel.send(
-                                ">>> Đã tạo phiên quay số không bị trùng, "
-                                "gõ `!random` để bắt đầu quay số, gõ `!stoprandom` để xóa phiên quay số nếu không cần dùng nữa.")
-                        else:
-                            random_number = advanced_random.get_random_number(minimum, maximum)
-                            await message.channel.send(">>> Số ngẫu nhiên: **{}**".format(random_number))
-
-                    elif message.content.lower() == "!random":
-                        number = self.randomizer.get_random_with_exclude(message.author)
-                        if number is not None:
-                            random_number = number[0]
-                            excluded_number = number[1]
-                            await message.channel.send(">>> Số ngẫu nhiên: **{}**".format(random_number))
-                            await message.channel.send(">>> Các số đã ra trước đó: **{}**".format(excluded_number))
-
-                    elif "!stoprandom" in message.content.lower():
-                        if self.randomizer.remove_random_session(message.author):
-                            await message.channel.send(">>> Đã xóa phiên quay số.")
-
                 # check giá coin
                 if self.permission.can_use_command(channel_id, "price"):
                     # lấy giá coin theo yêu cầu
@@ -240,6 +204,51 @@ class DiscordCommandClient(discord.Client):
                     elif 'đấm' in message.content.lower():
                         await self.responder.send_response_message("dam", message, link=True)
                         return
+                else:
+                    await self.random_command(message)
+
+        else:
+            if isinstance(message.channel, discord.DMChannel):
+                await self.random_command(message)
+
+    async def random_command(self, message):
+        # Random number command
+        if "!random" in message.content.lower() and responder.is_regex_match(message.content.lower(),
+                                                                             self.responder.random_regex):
+            profile = message.author
+            split_command = message.content.lower().split()
+            minimum = split_command[1]
+            maximum = split_command[2]
+
+            if minimum > maximum:
+                await message.channel.send(">>> Số đầu tiên phải bé hơn số phía sau")
+                return
+
+            if len(split_command) == 4 and split_command[3] == "exclude":
+                self.randomizer.add_random_session(minimum=minimum, maximum=maximum,
+                                                   channel_id=message.channel.id, author=profile)
+                await message.channel.send(
+                    ">>> Đã tạo phiên quay số không bị trùng, "
+                    "gõ `!random` để bắt đầu quay số, gõ `!random stop` để xóa phiên quay số nếu không cần dùng nữa.")
+            else:
+                random_number = advanced_random.get_random_number(minimum, maximum)
+                await message.channel.send(">>> Số ngẫu nhiên: **{}**".format(random_number))
+
+        elif message.content.lower() == "!random":
+            number = self.randomizer.get_random_with_exclude(message.author)
+            if number is not None:
+                random_number = number[0]
+                excluded_number = number[1]
+                await message.channel.send(">>> Số ngẫu nhiên: **{}**".format(random_number))
+                await message.channel.send(">>> Các số đã ra trước đó: **{}**".format(excluded_number))
+
+        elif "!random stop" == message.content.lower():
+            if self.randomizer.remove_random_session(message.author):
+                await message.channel.send(">>> Đã xóa phiên quay số.")
+
+        elif "!random sort" == message.content.lower():
+            sorted_numbers = self.randomizer.sort_exclude_random_numbers(message.author)
+            await message.channel.send(">>> Các số đã ra trước đó (đã sắp xếp): **{}**".format(sorted_numbers))
 
 
 client = DiscordCommandClient()
