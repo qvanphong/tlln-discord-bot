@@ -209,7 +209,8 @@ class CaroEngine:
                                 caro.get_current_mark())
 
     def check_horizontal_vertical(self, x, y, board, streak_to_win, block_rule, mark):
-        # Check horizontal
+        # Check Horizontal line first, if horizontal line doesn't match win condition.
+        # Then check Vertical line
         streak_regex = "{mark}{{{streak},{streak}}}".format(mark=mark, streak=streak_to_win)
         line = "".join(board[y])
 
@@ -245,12 +246,21 @@ class CaroEngine:
             if caro.height > rtl_bound - row_index >= 0:
                 rtl_line += str(caro.board[row_index][rtl_bound - row_index])
 
+        # Check RTL line first, if RTL is match win condition, check LTR line
+        # Check RTL line
         win_match = re.search(pattern=streak_regex, string=rtl_line)
         if win_match is not None:
             if block_rule is True:
                 return self.check_head_block(rtl_line, win_match.group(), streak_to_win, mark)
             return True
-        return False
+        else:
+            # Check LTR line
+            win_match = re.search(pattern=streak_regex, string=ltr_line)
+            if win_match is not None:
+                if block_rule is True:
+                    return self.check_head_block(ltr_line, win_match.group(), streak_to_win, mark)
+                return True
+            return False
 
     def check_head_block(self, line, win_match, win_streak, mark):
         win_index = line.index(win_match)
