@@ -17,8 +17,11 @@ class CaroClient(discord.Client):
         print("Caro bot on ready")
 
     async def on_message(self, message):
-        if message.author is not None and message.guild is not None and message.channel is not None and hasattr(
-                message.author, 'guild') and message.guild.id == env.SERVER_ID:
+        if message.author is not None \
+                and message.guild is not None \
+                and message.channel is not None \
+                and hasattr(message.author, 'guild') \
+                and message.guild.id == env.SERVER_ID:
             message_content = message.content.lower()
 
             if "!caro gg" == message_content:

@@ -11,8 +11,11 @@ class WordGameClient(discord.Client):
         self.word_game = word_game.WordGame(self)
 
     async def on_message(self, message):
-        if message.author is not None and message.guild is not None and message.channel is not None and hasattr(
-                message.author, 'guild'):
+        if message.author is not None \
+                and message.guild is not None \
+                and message.channel is not None \
+                and hasattr(message.author, 'guild') \
+                and message.author.guild.id == env.SERVER_ID:
             message_content = message.content.lower()
 
             if message_content == "!luatchoi":
