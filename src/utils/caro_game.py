@@ -2,6 +2,7 @@ import json
 from typing import Optional
 
 import discord
+from gomoku_ai import GomokuAI
 
 import definition
 from src.model.caro_board import CaroBoard
@@ -9,11 +10,19 @@ from src.repository import caro_repository
 from src.utils.caro_engine import CaroEngine
 
 
+class AIMockDiscordUser:
+    def __init__(self):
+        self.id = 6666
+        self.name = "🤖 Siêu CáRô"
+
+
 class CaroGame:
     games = []
     engine = CaroEngine()
     responses = []
     client = None
+    ai_engine = None
+    ai_player = None
 
     def __init__(self, client: discord.Client):
         f = open(definition.get_path('assets/caro_responses.json'), encoding="utf8")
@@ -21,6 +30,9 @@ class CaroGame:
         f.close()
 
         self.client = client
+
+        self.ai_engine = GomokuAI()
+        self.ai_player = AIMockDiscordUser()
 
     async def create_and_start(self, message, player1, player2, width, height, point_to_win, block_rule):
         if width < point_to_win or height < point_to_win or point_to_win <= 1:
@@ -39,10 +51,32 @@ class CaroGame:
         else:
             await self.send_message(message, "in_other_game")
 
+    async def create_and_start_ai(self, message, player, human_first=False):
+        if not self.is_in_game(player):
+            if human_first:
+                caro_game = CaroBoard(player, self.ai_player, 15, 15, 5, False)
+            else:
+                caro_game = CaroBoard(self.ai_player, player, 15, 15, 5, False)
+            self.games.append(caro_game)
+            self.ai_engine.start_game(caro_game.match_id, human_first)
+
+            await self.send_message(message, "game_created_ai", self.ai_player.name, player.id)
+
+            await self.announce_turn_with_info(message, caro_game)
+
+            if not human_first:
+                x, y = self.ai_engine.get_ai_move(caro_game.match_id, None)
+                await self.move_ai(message, caro_game, x, y)
+        else:
+            await self.send_message(message, "in_other_game")
+
     async def stop(self, message, player):
         player_game = self.get_game(player)
         if player_game is not None and player_game.creator == player:
             self.games.remove(player_game)
+            if self.is_ai_game(player_game):
+                self.ai_engine.end_game(player_game.match_id)
+
             await self.send_message(message, "game_stopped", player_game.match_id)
         else:
             await self.send_message(message, "not_in_any_game")
@@ -50,6 +84,10 @@ class CaroGame:
     async def rematch(self, message, player):
         player_game = self.get_game(player)
         if player_game is not None and player_game.creator == player:
+            if self.is_ai_game(player_game):
+                # TODO: unsupported for now to avoid complexity
+                return
+
             self.games.remove(player_game)
             await self.create_and_start(message,
                                         player_game.first_player,
@@ -63,15 +101,20 @@ class CaroGame:
         player_game = self.get_game(player)
         if player_game is not None:
             if player_game.current_player_turn == player:
-                await self.send_message(message, "surrender",
-                                        player.id,
-                                        player_game.first_player.id if player_game.second_player == player else player_game.second_player.id
-                                        )
+                if self.is_ai_game(player_game):
+                    await self.send_message(message, "surrender_ai", player.id, self.ai_player.name)
+                else:
+                    await self.send_message(message, "surrender",
+                                            player.id,
+                                            player_game.first_player.id if player_game.second_player == player else player_game.second_player.id
+                                            )
                 await self.save_score(
                     player_game.first_player if player_game.first_player != player_game.current_player_turn else player_game.second_player,
                     player_game.current_player_turn)
 
                 self.games.remove(player_game)
+                if self.is_ai_game(player_game):
+                    self.ai_engine.end_game(player_game.match_id)
             else:
                 await self.send_message(message, "not_your_turn", player.id)
 
@@ -86,16 +129,42 @@ class CaroGame:
                                       player_game.first_player if player_game.first_player != player_game.current_player_turn else player_game.second_player)
 
                 self.games.remove(player_game)
+                if self.is_ai_game(player_game):
+                    self.ai_engine.end_game(player_game.match_id)
             elif status == 0:
                 if player_game.is_board_full():
                     await self.send_message(message, "board_full")
                     self.games.remove(player_game)
+                    if self.is_ai_game(player_game):
+                        self.ai_engine.end_game(player_game.match_id)
                 else:
                     await self.announce_turn(message, player_game)
+                    if self.is_ai_game(player_game):
+                        x, y = self.ai_engine.get_ai_move(player_game.match_id, [x, y])
+                        await self.move_ai(message, player_game, x, y)
             else:
                 await self.send_message(message, "invalid_turn")
         else:
             await self.send_message(message, "not_your_turn", player.id)
+
+    async def move_ai(self, message, caro_game, x, y):
+        status = self.engine.make_turn(x, y, caro_game)
+        await self.send_message(message, "ai_move", self.ai_player.name, chr(ord("A") + y), x + 1)
+        if status == 1:
+            player = caro_game.first_player if caro_game.second_player is self.ai_player else caro_game.second_player
+            await self.send_board(message, caro_game)
+            await self.send_message(message, "lose_ai", player.id, self.ai_player.name)
+            await self.save_score(self.ai_player, player)
+
+            self.games.remove(caro_game)
+            self.ai_engine.end_game(caro_game.match_id)
+        elif status == 0:
+            if caro_game.is_board_full():
+                await self.send_message(message, "board_full")
+                self.games.remove(caro_game)
+                self.ai_engine.end_game(caro_game.match_id)
+            else:
+                await self.announce_turn(message, caro_game)
 
     async def admin_set_score(self, message, winner, loser):
         await self.save_score(winner, loser)
@@ -125,6 +194,12 @@ class CaroGame:
                 return True
         return False
 
+    def is_ai_game(self, caro_game):
+        if caro_game.first_player is self.ai_player or caro_game.second_player is self.ai_player:
+            return True
+        else:
+            return False
+
     def get_game(self, player) -> Optional[CaroBoard]:
         for index, game in enumerate(self.games):
             if game.first_player == player or game.second_player == player:
@@ -136,9 +211,14 @@ class CaroGame:
 
     async def announce_turn(self, message, caro_game):
         await self.send_board(message, caro_game)
-        await self.send_message(message, "player_turn",
-                                caro_game.current_player_turn.id,
-                                caro_game.get_current_mark())
+        if caro_game.current_player_turn is self.ai_player:
+            await self.send_message(message, "ai_turn",
+                                    self.ai_player.name,
+                                    caro_game.get_current_mark())
+        else:
+            await self.send_message(message, "player_turn",
+                                    caro_game.current_player_turn.id,
+                                    caro_game.get_current_mark())
 
     async def announce_turn_with_info(self, message, caro_game):
         await self.send_board(message, caro_game)
@@ -148,9 +228,14 @@ class CaroGame:
                                 caro_game.height,
                                 caro_game.streak_to_win,
                                 "Không" if caro_game.block_rule is False else "Có")
-        await self.send_message(message, "player_turn",
-                                caro_game.current_player_turn.id,
-                                caro_game.get_current_mark())
+        if caro_game.current_player_turn is self.ai_player:
+            await self.send_message(message, "ai_turn",
+                                    self.ai_player.name,
+                                    caro_game.get_current_mark())
+        else:
+            await self.send_message(message, "player_turn",
+                                    caro_game.current_player_turn.id,
+                                    caro_game.get_current_mark())
 
     async def send_message(self, message, key, *args):
         if len(args) == 0:

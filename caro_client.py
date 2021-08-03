@@ -42,6 +42,10 @@ class CaroClient(discord.Client):
             elif "!caro leaderboard" == message_content:
                 await self.caro.leader_board(message)
 
+            elif "!caro ai" == message_content:
+                author = await self.fetch_user_profile(message.author.id)
+                await self.caro.create_and_start_ai(message, author.user)
+
             elif "!caro" in message_content:
                 # Create game finder
                 if re.search(self.caro_with_custom_regex, message_content, re.IGNORECASE) and len(
