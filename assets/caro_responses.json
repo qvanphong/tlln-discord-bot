@@ -5,7 +5,7 @@
   "game_created_ai": "Đã tạo phòng đấu caro: **{}** vs <@!{}>",
   "game_stopped": "Đã dừng phòng đấu caro (ID: **{}**), không có ai thắng.",
   "not_in_any_game": "Bạn không có trong phòng đấu caro nào cả.",
-  "in_other_game": "Một trong 2 người chơi đang trong 1 trận caro khác. Vui lòng `!quit` trước khi chơi ở phòng khác",
+  "in_other_game": "Một trong 2 người chơi đang trong 1 trận caro khác. Vui lòng `!caro stop` trước khi chơi ở phòng khác",
   "surrender": "<@!{}> đã đầu hàng.\n\uD83C\uDF89<@!{}> thắng! \uD83C\uDF89",
   "surrender_ai": "<@!{}> đã đầu hàng.\n\uD83C\uDF89**{}** thắng! <:vcl:837406003011649576>",
   "win": "\uD83C\uDF89 Xin chúc mừng, <@!{}> đã chiến thắng 🎉",
