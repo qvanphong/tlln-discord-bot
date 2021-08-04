@@ -4,6 +4,7 @@ import numpy as np
 import io
 import cv2
 import discord
+import unicodedata
 
 GRAY = (63, 57, 54)
 WHITE = (222, 221, 220)
@@ -54,32 +55,23 @@ class CaroEngine:
         # draw title
         xcenter = image_width // 2
         ycenter = self.margin + self.title_height // 2
-        cv2.line(image, (xcenter - 5, ycenter), (xcenter + 5, ycenter),
-                 WHITE, 1, cv2.LINE_AA)
-        player1_size, _ = cv2.getTextSize(
-            caro.first_player.name, self.font,
-            self.title_font_size, self.title_font_thickness)
-        xp1 = xcenter - 10 - player1_size[0]
-        yp1 = self.margin + self.title_height \
-              - (self.title_height - player1_size[1]) // 2
-        cv2.putText(image, caro.first_player.name, (xp1, yp1),
-                    self.font, self.title_font_size, WHITE,
-                    self.title_font_thickness, cv2.LINE_AA)
-        player2_size, _ = cv2.getTextSize(
-            caro.second_player.name, self.font,
-            self.title_font_size, self.title_font_thickness)
-        xp2 = xcenter + 10
-        yp2 = self.margin + self.title_height \
-              - (self.title_height - player2_size[1]) // 2
-        cv2.putText(image, caro.second_player.name, (xp2, yp2),
+        title = f"{caro.first_player.name} - {caro.second_player.name}"
+        title = unicodedata.normalize("NFKD", title) \
+            .encode("ascii", "ignore").decode()
+        title = " ".join(title.split())
+        title_size, _ = cv2.getTextSize(title, self.font, self.title_font_size,
+                                        self.title_font_thickness)
+        xleft = xcenter - title_size[0] // 2
+        ybottom = ycenter + title_size[1] // 2
+        cv2.putText(image, title, (xleft, ybottom),
                     self.font, self.title_font_size, WHITE,
                     self.title_font_thickness, cv2.LINE_AA)
 
         # draw player marks
-        cv2.circle(image, (xp1 - 15, ycenter), 6, BLUE, 1, cv2.LINE_AA)
+        cv2.circle(image, (xleft - 12, ycenter), 6, BLUE, 1, cv2.LINE_AA)
         x_size, _ = cv2.getTextSize("x", self.font, 1.3, 3)
-        xleft = xp2 + player2_size[0] + 3
-        ybottom = ycenter + x_size[1] // 2 - 7
+        xleft = xcenter + title_size[0] // 2 + 3
+        ybottom = ycenter + x_size[1] // 2 - 8
         cv2.putText(image, "x", (xleft, ybottom),
                     self.font, 0.8, RED, 1, cv2.LINE_AA)
 
