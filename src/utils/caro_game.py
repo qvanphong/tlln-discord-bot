@@ -249,7 +249,9 @@ class CaroGame:
         leader_board = ""
         leader_board += "CARO LEADERBOARD\n"
         for index, player in enumerate(all_record):
-            icon = "🏆" if index == 0 else "🥈" if index == 1 else "🥉" if index == 2 else str(index) + ". "
+            icon = "🏆" if index == 0 else "🥈" if index == 1 else "🥉" if index == 2 else str(index + 1) + ". "
+            if index > 2 and index < 9:
+                icon += " "
             leader_board += pre_text.format(name=player["name"], win=player["win"], lose=player["lose"], icon=icon)
 
         await message.channel.send(">>> ```CSS\n{}```".format(leader_board))
