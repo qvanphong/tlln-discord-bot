@@ -33,7 +33,7 @@ class CaroClient(discord.Client):
             elif "!caro board" == message_content:
                 await self.caro.print_board(message, message.author)
 
-            elif "!caro huongdan" == message_content:
+            elif "!caro help" == message_content:
                 await self.caro.send_message(message, "tutorial")
 
             elif "!caro rematch" == message_content:
