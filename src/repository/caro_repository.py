@@ -36,5 +36,5 @@ def get_all_score():
                     return 0
 
     result = db.all()
-    return sorted(result, key=cmp_to_key(comparator), reverse=True)[0:11]
+    return sorted(result, key=cmp_to_key(comparator), reverse=True)[0:10]
 
