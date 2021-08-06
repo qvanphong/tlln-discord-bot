@@ -1,4 +1,5 @@
 from random import randint
+import re
 
 import discord
 
@@ -24,7 +25,7 @@ class DiscordCommandClient(discord.Client):
         await self.binance_ws.start()
         print('Started price alert')
 
-    async def on_message(self, message):
+    async def on_message(self, message: discord.Message):
         # Loại log lỗi do message ko rõ tới từ server/channel nào
         # Chỉ nhận tin nhắn và phản hồi nếu server là TLLN và channel ark
         if message.author is not None \
@@ -106,6 +107,10 @@ class DiscordCommandClient(discord.Client):
                         await self.responder.send_response_message("noichu", message)
                         return
 
+                elif message.content == "!tinhnguoi":
+                    await self.responder.send_response_message("thegioikhongcotinhnguoi", message, link=True)
+                    return
+
                 elif message.content == "!chaybobinhoi":
                     if self.permission.can_use_command(channel_id, "chaybo"):
                         await self.responder.send_response_message("chaybobinhoi", message)
@@ -129,6 +134,16 @@ class DiscordCommandClient(discord.Client):
                 elif "!sort" in message.content:
                     # Free for all channel, since no one gonna use it... lol
                     await self.responder.send_sorted_users(message)
+
+                elif "!add" in message.content:
+                    if responder.is_regex_match(message.content, self.responder.add_regex):
+                        result = re.compile(self.responder.add_regex).split(message.content)
+                        if len(result) == 5:
+                            if self.responder.add_command(result[2], result[3]):
+                                await message.channel.send(">>> <@!{}> đã thêm command !{}".format(message.author.id,
+                                                                                                   result[2]))
+                            else:
+                                await message.channel.send(">>> !{} đã tồn tại".format(result[2]))
 
                 # pick command
                 elif '!pick' in message.content:
@@ -176,6 +191,9 @@ class DiscordCommandClient(discord.Client):
                         await self.responder.send_sleep_time(message, "!wake" in message.content)
                         return
 
+                elif responder.is_regex_match(message.content, "!\w+"):
+                    await self.responder.send_response_message(message.content[1:], message, link=True)
+
             # check giá coin
             if self.permission.can_use_command(channel_id, "price"):
                 # lấy giá coin theo yêu cầu
@@ -206,7 +224,7 @@ class DiscordCommandClient(discord.Client):
                 elif 'đấm' in message.content.lower():
                     await self.responder.send_response_message("dam", message, link=True)
                     return
-            else:
+            elif "!random" in message.content.lower():
                 await self.random_command(message)
 
         else:

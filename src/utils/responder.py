@@ -66,6 +66,7 @@ class Responder:
     seneca_regex = r"^!seneca( \d+)?$"
     sort_regex = r"^\!sort (<@[!]?[0-9]*>(\s)?){1,}$"
     random_regex = r"^\!random \d+ \d+( exclude)?$"
+    add_regex = "(!add)\s+(.*)\s+(https:\/\/cdn\.discordapp\.com\/attachments\/\d+\/\d+\/[a-zA-Z0-9!@#$%^_&*.?]*)"
 
     # Instances
     coin_gecko = CoinGeckoAPI()  # coingecko instance
@@ -322,9 +323,19 @@ class Responder:
             await message.channel.send(run_image_url)
 
     def get_response_message(self, command, get_all=False):
-        if self.responses is not None:
+        if self.responses is not None and command in self.responses:
             responses = self.responses[command]
             if responses is not None and len(responses) > 0:
                 if get_all:
                     return ''.join(responses)
                 return responses[randint(0, len(responses) - 1)]
+
+    def add_command(self, command, content):
+        if command not in self.responses:
+            # append command to file
+            self.responses[command] = [content]
+            f = open(definition.get_path('assets/responses.json'), "w", encoding="utf8")
+            json.dump(self.responses, f, ensure_ascii=False)
+            f.close()
+            return True
+        return False
