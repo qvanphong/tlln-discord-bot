@@ -45,6 +45,10 @@ class DiscordCommandClient(discord.Client):
                         await self.responder.send_stoic_quote(message)
                         return
 
+                if message.content.lower() == '!chunghiakhacky':
+                    if self.permission.can_use_command(channel_id, "!stoic"):
+                        await self.responder.send_response_message("chunghiakhacky", message, link=True)
+                        return
                 # seneca's letter
                 if '!seneca' in message.content.lower():
                     if self.permission.can_use_command(channel_id, "!seneca"):
@@ -124,11 +128,6 @@ class DiscordCommandClient(discord.Client):
                             "https://cdn.discordapp.com/attachments/829403779513974824/861139558250709002/chaybobinhoi.gif")
                         return
 
-                # send self-added commands before any 'like-wise' command
-                elif responder.is_regex_match(message.content, "^@\w+$") \
-                        and message.content[1:] in self.responder.responses:
-                    await self.responder.send_response_message(message.content[1:], message, link=True)
-
                 elif "!chaybo " in message.content or "!chaytrongphong" in message.content:
                     if self.permission.can_use_command(channel_id, "chaybo"):
                         await self.responder.send_run_command(message)
@@ -201,6 +200,11 @@ class DiscordCommandClient(discord.Client):
                     if self.permission.can_use_command(channel_id, "!sleep"):
                         await self.responder.send_sleep_time(message, "!wake" in message.content)
                         return
+            elif len(message.content) > 0 and message.content[0] == "~":
+                # send self-added commands before any 'like-wise' command
+                if responder.is_regex_match(message.content, "^~\w+$") \
+                        and message.content[1:] in self.responder.responses:
+                    await self.responder.send_response_message(message.content[1:], message, link=True)
 
             # check giá coin
             if self.permission.can_use_command(channel_id, "price"):

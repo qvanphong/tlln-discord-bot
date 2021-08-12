@@ -335,7 +335,7 @@ class Responder:
         if command not in self.responses:
             # append command to file
             self.responses[command] = [content]
-            self.list_responses += "!{}\n".format(command)
+            self.list_responses += "~{}\n".format(command)
 
             f = open(definition.get_path('assets/responses.json'), "w", encoding="utf8")
             json.dump(self.responses, f, ensure_ascii=False)
@@ -346,7 +346,7 @@ class Responder:
     async def send_list_responses(self, message):
         if self.list_responses is None:
             self.list_responses = ""
-            for key in self.responses:
-                self.list_responses += "!{}\n".format(key)
+            for key in dict(list(self.responses.items())[22:]):
+                self.list_responses += "~{}\n".format(key)
 
         await message.channel.send("```{}```".format(self.list_responses))
