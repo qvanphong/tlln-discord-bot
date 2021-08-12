@@ -66,7 +66,7 @@ class Responder:
     seneca_regex = r"^!seneca( \d+)?$"
     sort_regex = r"^\!sort (<@[!]?[0-9]*>(\s)?){1,}$"
     random_regex = r"^\!random \d+ \d+( exclude)?$"
-    add_regex = "(!add)\s+(.*)\s+(https:\/\/cdn\.discordapp\.com\/attachments\/\d+\/\d+\/[a-zA-Z0-9!@#$%^_&*.?]*)"
+    add_regex = "(!add)\s+([a-zA-z]*)\s+(https:\/\/(cdn\.discordapp\.com|media\.discordapp\.net)\/attachments\/\d+\/\d+\/\S+)"
 
     # Instances
     coin_gecko = CoinGeckoAPI()  # coingecko instance
@@ -81,6 +81,7 @@ class Responder:
         'X-CMC_PRO_API_KEY': env.CMC_KEY,
     }
     client = None  # Discord Client
+    list_responses = None  # string of existing responses
 
     # Emojis
     emoji_money = "💰"
@@ -334,8 +335,18 @@ class Responder:
         if command not in self.responses:
             # append command to file
             self.responses[command] = [content]
+            self.list_responses += "!{}\n".format(command)
+
             f = open(definition.get_path('assets/responses.json'), "w", encoding="utf8")
             json.dump(self.responses, f, ensure_ascii=False)
             f.close()
             return True
         return False
+
+    async def send_list_responses(self, message):
+        if self.list_responses is None:
+            self.list_responses = ""
+            for key in self.responses:
+                self.list_responses += "!{}\n".format(key)
+
+        await message.channel.send("```{}```".format(self.list_responses))

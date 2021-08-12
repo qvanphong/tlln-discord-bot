@@ -79,6 +79,12 @@ class DiscordCommandClient(discord.Client):
                     if self.permission.can_use_command(channel_id, "!help"):
                         await self.responder.send_response_message("help", message, True)
                         return
+                # List all responses
+                elif message.content == "!list":
+                    if message.channel.id == 814159783677526036 or message.channel.id == 869234124412567622:
+                        await self.responder.send_list_responses(message)
+                    else:
+                        await message.channel.send("Qua #spam-bot đi feng")
 
                 # no horny command
                 elif message.content == "!horny":
@@ -118,6 +124,11 @@ class DiscordCommandClient(discord.Client):
                             "https://cdn.discordapp.com/attachments/829403779513974824/861139558250709002/chaybobinhoi.gif")
                         return
 
+                # send self-added commands before any 'like-wise' command
+                elif responder.is_regex_match(message.content, "^@\w+$") \
+                        and message.content[1:] in self.responder.responses:
+                    await self.responder.send_response_message(message.content[1:], message, link=True)
+
                 elif "!chaybo " in message.content or "!chaytrongphong" in message.content:
                     if self.permission.can_use_command(channel_id, "chaybo"):
                         await self.responder.send_run_command(message)
@@ -138,7 +149,7 @@ class DiscordCommandClient(discord.Client):
                 elif "!add" in message.content:
                     if responder.is_regex_match(message.content, self.responder.add_regex):
                         result = re.compile(self.responder.add_regex).split(message.content)
-                        if len(result) == 5:
+                        if len(result) == 6:
                             if self.responder.add_command(result[2], result[3]):
                                 await message.channel.send(">>> <@!{}> đã thêm command !{}".format(message.author.id,
                                                                                                    result[2]))
@@ -190,9 +201,6 @@ class DiscordCommandClient(discord.Client):
                     if self.permission.can_use_command(channel_id, "!sleep"):
                         await self.responder.send_sleep_time(message, "!wake" in message.content)
                         return
-
-                elif responder.is_regex_match(message.content, "!\w+"):
-                    await self.responder.send_response_message(message.content[1:], message, link=True)
 
             # check giá coin
             if self.permission.can_use_command(channel_id, "price"):

@@ -1,122 +1,348 @@
 {
-  "ancom": [
-    "Trăng lên đỉnh núi trăng mờ\nEm ơi anh hỏi bao giờ ăn cơm?",
-    "Ngoài trời dù nắng hay mưa\nA chỉ muốn hỏi cơm chưa hả nàng?",
-    "Việt Nam vừa đá thằng Lào\nEm cho anh hỏi khi nào ăn cơm?",
-    "Cơm sườn em vừa mới đơm\nHỏi nữa em tát phì đờm anh ra\nTát rồi bò dậy anh la:\n“Em ơi em đã ăn cơm chưa nào?”",
-    "Trăng lên đỉnh núi trăng mờ\nEm cho anh hỏi mấy giờ ăn cơm?\nTay cầm một đóa hoa thơm\nBâng khuâng anh hỏi ăn cơm mấy giờ?",
-    "Gặp em đôi mắt anh mờ\nEm cho anh hỏi mấy giờ ăn cơm\nGần em như lửa gần rơm\nAnh hỏi lần nữa ăn cơm mấy giờ?",
-    "Em ơi, em ới, em à\nEm thích ăn cháo hay là ăn cơm?\nNếu em trả lời là cơm\nThì cho anh hỏi mấy giờ em ăn?",
-    "Khói bắt đầu từ lửa\nLửa bắt đầu từ rơm\nA cũng không biết nữa\nKhi nào em ăn cơm?",
-    "Trăng lên đỉnh núi trăng mờ\nEm ơi cho hỏi mấy giờ ăn cơm\nGió đồng lùa nhẹ lúa thơm\nEm ơi cho hỏi ăn cơm mấy giờ\nPhố phường vắng lặng nên thơ\nEm ăn cơm trễ mấy giờ mới xong\nTrăng mờ trăng tỏ trời trong\nCơm em ăn mãi không xong thế này."
-  ],
-  "simp": [
-    "https://media.discordapp.net/attachments/829403779513974824/858934745537970216/Simp.gif"
-  ],
-  "help": [
-    "`!ava tao`: Lấy avatar của mày\n",
-    "`!ava may`: Lấy avatar của tao\n",
-    "`!stoic`: Lấy quote ngẫu nhiên 1 quote stoic <:pray2:840209827325935616>\n",
-    "`!seneca <1 - 43>`: Lấy thư của seneca. Vd: Gõ `!seneca` để lấy thư ngẫu nhiên, gõ `!seneca 1` để lấy lá thư thứ 1\n",
-    "`!tailieu`: Tổng hợp tài liệu từ Trở lại làm người\n",
-    "`!carljung`: Lấy ngẫu nhiên quote của Carl Jung\n",
-    "`!dh`: Tài liệu của Duy Huỳnh\n",
-    "`!fap`: Lấy ngẫu nhiên nội dung về NoFap\n",
-    "`!dmn`: Bitcoin dominance 📈\n",
-    "`!simp`: Chửi simp cứ sài cái này<:thangnayduoc:815228506744553502>\n",
-    "`!ancom`: Em ăn cơm chưa? 🍚\n",
-    "`!horny`: No horny warning\n",
-    "`!bonk`: Bonk!\n",
-    "`!xoa <user>`: Bày tỏ sự yêu thương <:thatim:827892798518460417>\n",
-    "`!e <emoji>`: lấy ảnh gốc của emoji\n",
-    "`!wake <hour>:<minute>`: Tìm thời gian đi ngủ phù hợp khi thức dậy với giờ đã cho, giờ được định dạng 24 giờ (vd: !wake 7:00)\n",
-    "`!sleep <hour>:<minute>`: Tìm thời gian thức dậy phù hợp giờ ngủ đã cho, giờ được định dạng 24 giờ (vd: !sleep 22:00)\n",
-    "`!random <min> <max>`: Ra ngẫu nhiên 1 số trong khoảng từ <min> tới <max>\n",
-    "`số <coins> = ? <coins>`: Tính tỉ lệ giữa 2 coin (ví dụ: 1 GAS = ? NEO)\n",
-    "`?coin`: lấy giá hiện tại của coin (vd: ?ark lấy giá ark hiện tại 30$) 💵"
-  ],
-  "dap": [
-    "https://cdn.discordapp.com/emojis/828369144197808138.gif"
-  ],
-  "ban": [
-    "https://cdn.discordapp.com/attachments/829403779513974824/858751382882091018/ban.gif"
-  ],
-  "dam": [
-    "https://cdn.discordapp.com/attachments/829403779513974824/858751337608118292/dam.gif"
-  ],
-  "dh": [
-    "Tài liệu mới nhất của Duy Huỳnh:\nhttps://cdn.discordapp.com/attachments/813452767099355136/859710887387987988/DUY_HUYNH_By_Category.pdf"
-  ],
-  "trade": [
-    "Lên sàn hí hoáy mua coin\nAi ngờ trade tréc mất luôn căn nhà",
-    "trade còn cái nịt <:boomer:780547751255343225>",
-    "'G' trong trade là giàu sang."
-  ],
-  "future": [
-    "Hôm qua feng đánh Future\nHôm nay feng đã mịt mờ tương lai",
-    "future là không có tương lai đâu feng <:boomer:780547751255343225>",
-    "'G' trong future là giàu sang."
-  ],
-  "margin": [
-    "ra đê nha bây <:vamohoi:828369143052763196>",
-    "Margin để đánh cho nhanh\nMười thằng chơi hết 11 thằng ra đê"
-  ],
-  "swap": [
-    "swap mất coin ráng chịu <:vcl:837406003011649576>",
-    "Xào chẻ ăn lìn <:vcl:837406003011649576>",
-    "swap khác gì cầm sổ đỏ theo pháp <:vcl:837406003011649576>",
-    "swap thì k còn cứt để mà cạp <:vcl:837406003011649576>",
-    "swap là đời chỉ có nát <:vcl:837406003011649576>",
-    "Mua rồi thì để đó nha\nĐừng có swap kẻo mà mất coin"
-  ],
-  "soap": [
-    "t biết m định nói swap <a:clgt:844654740309540866>"
-  ],
-  "buy_ark": [
-    "Mua Hề phải có niềm tin\nCông nghệ còn đó thì mình không lo \n<:joker:818018206521360384>"
-  ],
-  "buy_ark_2": [
-    "https://media.discordapp.net/attachments/829403779513974824/858782600515420160/MemeArk.png"
-  ],
-  "ask_price": [
-    "Biết được đã giàu <:wojak:777473656594759700>",
-    "Biết trước đã giàu <:wojak:777473656594759700>",
-    "Tý ăn gì còn chưa biết, lo đi hỏi chuyện trời đất <:wojak:777473656594759700>",
-    "Mai, mốt, tuần sau, tháng sau, năm sau... ai biết? Sao tao biết <:wojak:777473656594759700>",
-    "Hỏi Doraemon thử <:wojak:777473656594759700>",
-    "Nắng chiếu lung linh muôn hoa vàng\nMình không biết mình không biết được chưa <:wojak:777473656594759700>\n"
-  ],
-  "no_horny":["https://media.discordapp.net/attachments/829403779513974824/859371277612744714/2Q.png"],
-  "bonk": ["https://media.discordapp.net/attachments/829403779513974824/859371333560172555/image0.png?width=545&height=434"],
-  "chaybobinhoi": [
-    "Chạy bộ Bình ơi!!"
-  ],
-  "chaybo": [
-    "**{author}** vừa rủ **{tagged}** đi chạy bộ.",
-    "**{author}** chán quá nên rủ **{tagged}** đi chạy bộ.",
-    "**{author}** hỏny nên rủ **{tagged}** đi chạy bộ cho bớt hỏny.",
-    "**{author}** ôm gear lâu quá nên rủ **{tagged}** đi chạy bộ cho khỏe người.",
-    "**{author}** vừa rủ **{tagged}** đi chạy bộ đến Kim Mã.",
-    "**{author}** vừa sẽ xong thì bỗng rủ **{tagged}** đi chạy bộ.",
-    "**{author}** vừa mua ark xong nên rủ **{tagged}** đi chạy bộ.",
-    "**{author}** rủ **{tagged}** đi chạy bộ nhanh nhanh để về còn sẽ.",
-    "**{author}** vừa rủ **{tagged}** đi chạy bộ để chú dream không thể chửi \"ngồi lì\".",
-    "**{author}** đang rất mệt nhưng vẫn rủ **{tagged}** đi chạy bộ, tinh thần chạy bộ++ 👏 ",
-    "**{author}** éo có lý do gì để rủ **{tagged}** đi chạy bộ, nhưng vẫn rủ **{tagged}** đi chạy bộ"
-  ],
-  "chaytrongphong": [
-    "**{author}** vừa rủ **{tagged}** chạy bộ, nhưng tình hình covid căng thẳng nên cả 2 cùng chạy trong phòng",
-    "**{author}** vừa rủ **{tagged}** chạy bộ trong phòng",
-    "**{author}** vừa mua máy chạy bộ, bèn rủ **{tagged}** sang nhà chạy bộ cùng.",
-    "**{tagged}** vừa đến nhà **{author}** chơi nhưng **{author}** rủ ngay **{tagged}** chạy bộ trong phòng éo có lý do "
-  ],
-  "tailieu": [
-    "Tài liệu về Stoic, Carl Jung, Duy Huỳnh, Nguyễn Duy Cần,... được sưu tầm bở Trở lại làm người: \nhttps://www.facebook.com/permalink.php?story_fbid=112580303705418&id=109294147367367"
-  ],
-  "noichu": [
-    "LUẬT CHƠI\n- trả lời trong 15s\n- chơi ít nhất 2 vòng\n- không phải là từ nước ngoài hoặc phiên âm nước ngoài\n- không phải là từ lặp (vd: ngu ngu, khinh khinh,...)\n- không phải tên riêng\n- có thể đảo từ\nVd: Con bò có thể đổi thành bò con\n- 1 từ không được lập quá 2 lần\n- từ cấm: gái gú, giới thiệu\n- Chỉ đc dùng danh từ, động từ, tính từ\nvd: ăn uống chứ ko đc ăn cam, ăn bưởi; đi đứng, đi lại chứ ko đc đi học, đi chơi nhé!\n- Không được lấy những từ quá khó hiểu, vô nghĩa\nnếu từ nó là từ chuyên môn thì phải đưa LINK.\n\nCHIA GIẢI\n- người nào thắng từ 0.2 ark trở lên phải chia cho trọng tài 0.1 ark \n- nếu có từ 2 người thắng từ 0.1 ark trở lên thì\n1 trong những người đó phải chia 0.1 ark cho trọng tài\n- làm trọng tài dc tip 0.1 ark\n- phát hiện lỗi sai dc tặng 0.1 ark từ người đưa ra đáp án đó\n\nCẤM\n- ai nhắc phạt 0.1 ark\n- ai bí thì phải tip 0.1 ark cho người ra chữ làm mình bí\n- ko dùng tool ( các trang tìm kiếm)"
-  ],
-  "thegioikhongcotinhnguoi": [
-    "https://cdn.discordapp.com/attachments/845382112118308934/871968144191815710/image0-59.jpg"
-  ]
+	"ancom": [
+		"Trăng lên đỉnh núi trăng mờ\nEm ơi anh hỏi bao giờ ăn cơm?",
+		"Ngoài trời dù nắng hay mưa\nA chỉ muốn hỏi cơm chưa hả nàng?",
+		"Việt Nam vừa đá thằng Lào\nEm cho anh hỏi khi nào ăn cơm?",
+		"Cơm sườn em vừa mới đơm\nHỏi nữa em tát phì đờm anh ra\nTát rồi bò dậy anh la:\n“Em ơi em đã ăn cơm chưa nào?”",
+		"Trăng lên đỉnh núi trăng mờ\nEm cho anh hỏi mấy giờ ăn cơm?\nTay cầm một đóa hoa thơm\nBâng khuâng anh hỏi ăn cơm mấy giờ?",
+		"Gặp em đôi mắt anh mờ\nEm cho anh hỏi mấy giờ ăn cơm\nGần em như lửa gần rơm\nAnh hỏi lần nữa ăn cơm mấy giờ?",
+		"Em ơi, em ới, em à\nEm thích ăn cháo hay là ăn cơm?\nNếu em trả lời là cơm\nThì cho anh hỏi mấy giờ em ăn?",
+		"Khói bắt đầu từ lửa\nLửa bắt đầu từ rơm\nA cũng không biết nữa\nKhi nào em ăn cơm?",
+		"Trăng lên đỉnh núi trăng mờ\nEm ơi cho hỏi mấy giờ ăn cơm\nGió đồng lùa nhẹ lúa thơm\nEm ơi cho hỏi ăn cơm mấy giờ\nPhố phường vắng lặng nên thơ\nEm ăn cơm trễ mấy giờ mới xong\nTrăng mờ trăng tỏ trời trong\nCơm em ăn mãi không xong thế này."
+	],
+	"simp": [
+		"https://media.discordapp.net/attachments/829403779513974824/858934745537970216/Simp.gif"
+	],
+	"help": [
+		"`!ava tao`: Lấy avatar của mày\n",
+		"`!ava may`: Lấy avatar của tao\n",
+		"`!stoic`: Lấy quote ngẫu nhiên 1 quote stoic <:pray2:840209827325935616>\n",
+		"`!seneca <1 - 43>`: Lấy thư của seneca. Vd: Gõ `!seneca` để lấy thư ngẫu nhiên, gõ `!seneca 1` để lấy lá thư thứ 1\n",
+		"`!tailieu`: Tổng hợp tài liệu từ Trở lại làm người\n",
+		"`!carljung`: Lấy ngẫu nhiên quote của Carl Jung\n",
+		"`!dh`: Tài liệu của Duy Huỳnh\n",
+		"`!fap`: Lấy ngẫu nhiên nội dung về NoFap\n",
+		"`!dmn`: Bitcoin dominance 📈\n",
+		"`!simp`: Chửi simp cứ sài cái này<:thangnayduoc:815228506744553502>\n",
+		"`!ancom`: Em ăn cơm chưa? 🍚\n",
+		"`!horny`: No horny warning\n",
+		"`!bonk`: Bonk!\n",
+		"`!xoa <user>`: Bày tỏ sự yêu thương <:thatim:827892798518460417>\n",
+		"`!e <emoji>`: lấy ảnh gốc của emoji\n",
+		"`!wake <hour>:<minute>`: Tìm thời gian đi ngủ phù hợp khi thức dậy với giờ đã cho, giờ được định dạng 24 giờ (vd: !wake 7:00)\n",
+		"`!sleep <hour>:<minute>`: Tìm thời gian thức dậy phù hợp giờ ngủ đã cho, giờ được định dạng 24 giờ (vd: !sleep 22:00)\n",
+		"`!random <min> <max>`: Ra ngẫu nhiên 1 số trong khoảng từ <min> tới <max>\n",
+		"`số <coins> = ? <coins>`: Tính tỉ lệ giữa 2 coin (ví dụ: 1 GAS = ? NEO)\n",
+		"`?coin`: lấy giá hiện tại của coin (vd: ?ark lấy giá ark hiện tại 30$) 💵"
+	],
+	"dap": [
+		"https://cdn.discordapp.com/emojis/828369144197808138.gif"
+	],
+	"ban": [
+		"https://cdn.discordapp.com/attachments/829403779513974824/858751382882091018/ban.gif"
+	],
+	"dam": [
+		"https://cdn.discordapp.com/attachments/829403779513974824/858751337608118292/dam.gif"
+	],
+	"dh": [
+		"Tài liệu mới nhất của Duy Huỳnh:\nhttps://cdn.discordapp.com/attachments/813452767099355136/859710887387987988/DUY_HUYNH_By_Category.pdf"
+	],
+	"trade": [
+		"Lên sàn hí hoáy mua coin\nAi ngờ trade tréc mất luôn căn nhà",
+		"trade còn cái nịt <:boomer:780547751255343225>",
+		"'G' trong trade là giàu sang."
+	],
+	"future": [
+		"Hôm qua feng đánh Future\nHôm nay feng đã mịt mờ tương lai",
+		"future là không có tương lai đâu feng <:boomer:780547751255343225>",
+		"'G' trong future là giàu sang."
+	],
+	"margin": [
+		"ra đê nha bây <:vamohoi:828369143052763196>",
+		"Margin để đánh cho nhanh\nMười thằng chơi hết 11 thằng ra đê"
+	],
+	"swap": [
+		"swap mất coin ráng chịu <:vcl:837406003011649576>",
+		"Xào chẻ ăn lìn <:vcl:837406003011649576>",
+		"swap khác gì cầm sổ đỏ theo pháp <:vcl:837406003011649576>",
+		"swap thì k còn cứt để mà cạp <:vcl:837406003011649576>",
+		"swap là đời chỉ có nát <:vcl:837406003011649576>",
+		"Mua rồi thì để đó nha\nĐừng có swap kẻo mà mất coin"
+	],
+	"soap": [
+		"t biết m định nói swap <a:clgt:844654740309540866>"
+	],
+	"buy_ark": [
+		"Mua Hề phải có niềm tin\nCông nghệ còn đó thì mình không lo \n<:joker:818018206521360384>"
+	],
+	"buy_ark_2": [
+		"https://media.discordapp.net/attachments/829403779513974824/858782600515420160/MemeArk.png"
+	],
+	"ask_price": [
+		"Biết được đã giàu <:wojak:777473656594759700>",
+		"Biết trước đã giàu <:wojak:777473656594759700>",
+		"Tý ăn gì còn chưa biết, lo đi hỏi chuyện trời đất <:wojak:777473656594759700>",
+		"Mai, mốt, tuần sau, tháng sau, năm sau... ai biết? Sao tao biết <:wojak:777473656594759700>",
+		"Hỏi Doraemon thử <:wojak:777473656594759700>",
+		"Nắng chiếu lung linh muôn hoa vàng\nMình không biết mình không biết được chưa <:wojak:777473656594759700>\n"
+	],
+	"no_horny": [
+		"https://media.discordapp.net/attachments/829403779513974824/859371277612744714/2Q.png"
+	],
+	"bonk": [
+		"https://media.discordapp.net/attachments/829403779513974824/859371333560172555/image0.png?width=545&height=434"
+	],
+	"chaybobinhoi": [
+		"Chạy bộ Bình ơi!!"
+	],
+	"chaybo": [
+		"**{author}** vừa rủ **{tagged}** đi chạy bộ.",
+		"**{author}** chán quá nên rủ **{tagged}** đi chạy bộ.",
+		"**{author}** hỏny nên rủ **{tagged}** đi chạy bộ cho bớt hỏny.",
+		"**{author}** ôm gear lâu quá nên rủ **{tagged}** đi chạy bộ cho khỏe người.",
+		"**{author}** vừa rủ **{tagged}** đi chạy bộ đến Kim Mã.",
+		"**{author}** vừa sẽ xong thì bỗng rủ **{tagged}** đi chạy bộ.",
+		"**{author}** vừa mua ark xong nên rủ **{tagged}** đi chạy bộ.",
+		"**{author}** rủ **{tagged}** đi chạy bộ nhanh nhanh để về còn sẽ.",
+		"**{author}** vừa rủ **{tagged}** đi chạy bộ để chú dream không thể chửi \"ngồi lì\".",
+		"**{author}** đang rất mệt nhưng vẫn rủ **{tagged}** đi chạy bộ, tinh thần chạy bộ++ 👏 ",
+		"**{author}** éo có lý do gì để rủ **{tagged}** đi chạy bộ, nhưng vẫn rủ **{tagged}** đi chạy bộ"
+	],
+	"chaytrongphong": [
+		"**{author}** vừa rủ **{tagged}** chạy bộ, nhưng tình hình covid căng thẳng nên cả 2 cùng chạy trong phòng",
+		"**{author}** vừa rủ **{tagged}** chạy bộ trong phòng",
+		"**{author}** vừa mua máy chạy bộ, bèn rủ **{tagged}** sang nhà chạy bộ cùng.",
+		"**{tagged}** vừa đến nhà **{author}** chơi nhưng **{author}** rủ ngay **{tagged}** chạy bộ trong phòng éo có lý do "
+	],
+	"tailieu": [
+		"Tài liệu về Stoic, Carl Jung, Duy Huỳnh, Nguyễn Duy Cần,... được sưu tầm bở Trở lại làm người: \nhttps://www.facebook.com/permalink.php?story_fbid=112580303705418&id=109294147367367"
+	],
+	"noichu": [
+		"LUẬT CHƠI\n- trả lời trong 15s\n- chơi ít nhất 2 vòng\n- không phải là từ nước ngoài hoặc phiên âm nước ngoài\n- không phải là từ lặp (vd: ngu ngu, khinh khinh,...)\n- không phải tên riêng\n- có thể đảo từ\nVd: Con bò có thể đổi thành bò con\n- 1 từ không được lập quá 2 lần\n- từ cấm: gái gú, giới thiệu\n- Chỉ đc dùng danh từ, động từ, tính từ\nvd: ăn uống chứ ko đc ăn cam, ăn bưởi; đi đứng, đi lại chứ ko đc đi học, đi chơi nhé!\n- Không được lấy những từ quá khó hiểu, vô nghĩa\nnếu từ nó là từ chuyên môn thì phải đưa LINK.\n\nCHIA GIẢI\n- người nào thắng từ 0.2 ark trở lên phải chia cho trọng tài 0.1 ark \n- nếu có từ 2 người thắng từ 0.1 ark trở lên thì\n1 trong những người đó phải chia 0.1 ark cho trọng tài\n- làm trọng tài dc tip 0.1 ark\n- phát hiện lỗi sai dc tặng 0.1 ark từ người đưa ra đáp án đó\n\nCẤM\n- ai nhắc phạt 0.1 ark\n- ai bí thì phải tip 0.1 ark cho người ra chữ làm mình bí\n- ko dùng tool ( các trang tìm kiếm)"
+	],
+	"chunghiakhacky": [
+		"https://youtu.be/xJ02hnw47NA"
+	],
+	"thegioikhongcotinhnguoi": [
+		"https://cdn.discordapp.com/attachments/845382112118308934/871968144191815710/image0-59.jpg"
+	],
+	"nguoitu": [
+		"https://cdn.discordapp.com/attachments/869234124412567622/873370370240028722/image0-4.jpg"
+	],
+	"phanboi": [
+		"https://media.discordapp.net/attachments/873180498787188756/873344601979777064/image0.png"
+	],
+	"neo": [
+		"https://media.discordapp.net/attachments/869234124412567622/873385187235463188/Screenshot_2021-08-07-09-00-29-90.png"
+	],
+	"firo": [
+		"https://media.discordapp.net/attachments/810900442648936459/873211056992964608/IMG_20210806_211432.jpg"
+	],
+	"tuyenan": [
+		"https://cdn.discordapp.com/attachments/869234124412567622/873399765373689876/SM1zVuBl_400x400.png"
+	],
+	"stopit": [
+		"https://cdn.discordapp.com/attachments/869234124412567622/873399857484800010/unknown.png"
+	],
+	"hemoi": [
+		"https://cdn.discordapp.com/attachments/869234124412567622/873400084124008448/179849209_172874561383797_7543181331206832567_n.jpg"
+	],
+	"camonmc": [
+		"https://cdn.discordapp.com/attachments/869234124412567622/873445403524235284/image0.png"
+	],
+	"im": [
+		"https://cdn.discordapp.com/attachments/869234124412567622/873446888454619156/image0.jpg"
+	],
+	"thoaoma": [
+		"https://cdn.discordapp.com/attachments/869234124412567622/873447260334223410/image0.png"
+	],
+	"tinhanhnem": [
+		"https://cdn.discordapp.com/attachments/869234124412567622/873447412981714944/image0.png"
+	],
+	"keofb": [
+		"https://cdn.discordapp.com/attachments/869234124412567622/873448156086558751/image0.png"
+	],
+	"hoitham": [
+		"https://media.discordapp.net/attachments/873180223288533002/873450443798376458/unknown.png?width=256&height=68"
+	],
+	"bimat": [
+		"https://media.discordapp.net/attachments/873180223288533002/873451298635268136/unknown.png?width=345&height=66"
+	],
+	"thoidungkhoc": [
+		"https://media.discordapp.net/attachments/873180223288533002/873451549928595476/unknown.png?width=334&height=52"
+	],
+	"anhbana": [
+		"https://media.discordapp.net/attachments/869234124412567622/873452038208495656/221692081_4182776141775834_5562741252187122328_n.png?width=571&height=428"
+	],
+	"anhbanah": [
+		"https://media.discordapp.net/attachments/869234124412567622/873453317324423208/image0.jpg?width=451&height=428"
+	],
+	"lenghe": [
+		"https://cdn.discordapp.com/attachments/869234124412567622/873460357681782824/cuc_ghidon.png"
+	],
+	"lenghedibot": [
+		"https://media.discordapp.net/attachments/829403779513974824/872144881701781534/unknown.png?width=700&height=473"
+	],
+	"humanright": [
+		"https://cdn.discordapp.com/attachments/869234124412567622/873462030940667925/cuck_the_bot.png"
+	],
+	"hmaohman": [
+		"https://cdn.discordapp.com/attachments/869234124412567622/873509885084581918/image0.jpg"
+	],
+	"hoagiaithatbai": [
+		"https://cdn.discordapp.com/attachments/829403779513974824/873510221891379240/unknown-33.png"
+	],
+	"xabong3toi": [
+		"https://media.discordapp.net/attachments/869234124412567622/873530452147855380/unknown.png?width=417&height=121"
+	],
+	"hoagiai": [
+		"https://cdn.discordapp.com/attachments/869234124412567622/873531367953137704/image0.jpg"
+	],
+	"lenghedingai": [
+		"https://cdn.discordapp.com/attachments/814159783677526036/873536471292858368/unknown.png"
+	],
+	"gas": [
+		"https://media.discordapp.net/attachments/869234124412567622/873562611239759872/Screenshot_2021-08-07-20-45-39-48.png"
+	],
+	"chucchich": [
+		"https://cdn.discordapp.com/attachments/873180498787188756/873776588452397097/image0.png"
+	],
+	"maithuy": [
+		"https://media.discordapp.net/attachments/810900401347231764/873821609234923650/f0a9c40e3a241f75214fdbaf4787da74.jpg"
+	],
+	"bearnay": [
+		"https://media.discordapp.net/attachments/869234124412567622/873830673176203284/unknown.png?width=835&height=468"
+	],
+	"beartrap": [
+		"https://media.discordapp.net/attachments/820356065534148628/873830123026124820/unknown.png?width=825&height=468"
+	],
+	"cabay": [
+		"https://media.discordapp.net/attachments/810900442648936459/873850405254205460/giphy_7.gif"
+	],
+	"voca": [
+		"https://media.discordapp.net/attachments/869234124412567622/873853209742024704/giphy_3.gif?width=380&height=467"
+	],
+	"echfuck": [
+		"https://cdn.discordapp.com/attachments/869234124412567622/873900520610332762/image0.jpg"
+	],
+	"echfuk": [
+		"https://media.discordapp.net/attachments/869234124412567622/873900520610332762/image0.jpg?width=150&height=270"
+	],
+	"banthanoi": [
+		"https://media.discordapp.net/attachments/829403779513974824/874138760915345418/download_1.gif"
+	],
+	"motphat": [
+		"https://cdn.discordapp.com/attachments/873180498787188756/874191383357960242/image0.png"
+	],
+	"tinhnghiaanhem": [
+		"https://cdn.discordapp.com/attachments/869234124412567622/874202983783616552/unknown.png"
+	],
+	"letmein": [
+		"https://cdn.discordapp.com/attachments/869234124412567622/874208022338105365/image0.png"
+	],
+	"nguthicuck": [
+		"https://media.discordapp.net/attachments/845382112118308934/874229323920470056/gui-den-nguoi-anh-em-bo-hoa-tuoi-tham-ngu-thi-chet-khoc-loc-cai-lon.jpg"
+	],
+	"princessark": [
+		"https://media.discordapp.net/attachments/829403779513974824/874256304007446539/unknown.png"
+	],
+	"thansam": [
+		"https://media.discordapp.net/attachments/829403779513974824/874257759422521365/pepe-dead.gif"
+	],
+	"hoangtumoi": [
+		"https://cdn.discordapp.com/attachments/869234124412567622/874260694646784030/image0.png"
+	],
+	"ghidongxinxoi": [
+		"https://cdn.discordapp.com/attachments/829403779513974824/874262314612850738/image0.png"
+	],
+	"thayhuan": [
+		"https://cdn.discordapp.com/attachments/873180498787188756/874283271486341190/huan.mp4"
+	],
+	"xamlon": [
+		"https://cdn.discordapp.com/attachments/869234124412567622/874305135063494676/K-oMSSjhUfKgKVLJYPyHzCC9V3L90tM1YJTnQYUbMP7gJLez-vsyy_gA0o7A6CFJ--SBdPU0RYpIKo7s9DA5cgDLIo3T5FbrH8bt.png"
+	],
+	"echliem": [
+		"https://cdn.discordapp.com/attachments/869234124412567622/873900520610332762/image0.jpg"
+	],
+	"bangchung": [
+		"https://cdn.discordapp.com/attachments/873180498787188756/874397507579441172/image0.png"
+	],
+	"anchaodabat": [
+		"https://cdn.discordapp.com/attachments/845382112118308934/874646130296758323/image0.jpg"
+	],
+	"cachbocphot": [
+		"https://media.discordapp.net/attachments/874646512259453019/874660307736330271/image0.jpg?width=597&height=676"
+	],
+	"targethe": [
+		"https://cdn.discordapp.com/attachments/829403779513974824/874673629563060224/image0.png"
+	],
+	"buancuaghidong": [
+		"https://cdn.discordapp.com/attachments/829403779513974824/874673629563060224/image0.png"
+	],
+	"ghidongbuan": [
+		"https://cdn.discordapp.com/attachments/829403779513974824/874685502882709514/image0.png"
+	],
+	"thayphapxaolon": [
+		"https://cdn.discordapp.com/attachments/874667547700637737/874721765371310080/unknown.png"
+	],
+	"anchan": [
+		"https://cdn.discordapp.com/attachments/874646512259453019/874724115980886016/PicsArt_08-11-01.41.07.jpg"
+	],
+	"chetmemaynhaech": [
+		"https://cdn.discordapp.com/attachments/873180498787188756/874802509821145168/image0.png"
+	],
+	"echcaisuk": [
+		"https://cdn.discordapp.com/attachments/873180498787188756/874809206010695700/image0.png"
+	],
+	"echchoingu": [
+		"https://cdn.discordapp.com/attachments/873180498787188756/874809441621528616/image0.png"
+	],
+	"echtangai": [
+		"https://cdn.discordapp.com/attachments/873180498787188756/874809469454909470/image0.png"
+	],
+	"echditu": [
+		"https://cdn.discordapp.com/attachments/873180498787188756/874809346847031316/image0.png"
+	],
+	"echkhoecua": [
+		"https://cdn.discordapp.com/attachments/873180498787188756/874809300793565204/image0.png"
+	],
+	"echgangster": [
+		"https://cdn.discordapp.com/attachments/873180498787188756/874809527915143208/image0.png"
+	],
+	"gianghoa": [
+		"https://cdn.discordapp.com/attachments/874646512259453019/874839195124912188/y2mate.com_-_Anh_ban_a_HD_version_1080pFHR.mp4"
+	],
+	"rutkn": [
+		"https://media.discordapp.net/attachments/869234124412567622/874852883080814622/image0.png"
+	],
+	"ready": [
+		"https://media.discordapp.net/attachments/829403779513974824/834625784156520508/ARK_clown_racing.mp4"
+	],
+	"ditconme": [
+		"https://cdn.discordapp.com/attachments/874646512259453019/874982559879151676/TLLN-chui-ac-vl.png"
+	],
+	"fomo": [
+		"https://cdn.discordapp.com/attachments/869234124412567622/875038256348155904/2Q.png"
+	],
+	"hophapcay": [
+		"https://cdn.discordapp.com/attachments/869234124412567622/875067436150435850/j.jpg"
+	],
+	"dudinh": [
+		"https://media.discordapp.net/attachments/813452767099355136/875037017459810334/image0.png"
+	],
+	"taoditconmemay": [
+		"https://media.discordapp.net/attachments/874646512259453019/874862411478335548/Screenshot_from_2021-08-10_20-50-41.png"
+	],
+	"caquay": [
+		"https://media.discordapp.net/attachments/776384891465891850/875099804429082634/what-tx-eng.gif"
+	],
+	"luaga": [
+		"https://cdn.discordapp.com/attachments/874646512259453019/875124166473437184/unknown.png"
+	],
+	"shilldinh": [
+		"https://cdn.discordapp.com/attachments/820356065534148628/875016456562163732/shill_inh.jpg"
+	],
+	"cayvl": [
+		"https://cdn.discordapp.com/attachments/869234124412567622/875207666702626866/j.jpg"
+	]
 }

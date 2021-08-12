@@ -49,6 +49,11 @@
       "all"
     ]
   },
+  "869234124412567622": {
+    "alias": "xưởng-dev-bot",
+    "allow": ["all"],
+    "not_allow": []
+  },
   "all":  {
     "allow": ["!dh", "!stoic", "!pick", "!help", "!tailieu", "!seneca"],
     "not_allow": ["all"]
